@@ -87,7 +87,6 @@ const PokePage: React.FC = () => {
         borderRadius: 4,
         border: `3px solid ${color}`
       }}>
-        {/* Cabeçalho */}
         <Box sx={{ 
           textAlign: "center", 
           mb: 4,
@@ -154,7 +153,6 @@ const PokePage: React.FC = () => {
           />
         </Box>
 
-        {/* Descrição */}
         <Typography variant="body1" sx={{ 
           mb: 4, 
           fontStyle: "italic",
@@ -164,7 +162,6 @@ const PokePage: React.FC = () => {
           {pokemon.description}
         </Typography>
 
-        {/* Tabs para organização */}
         <Tabs 
           value={tabValue} 
           onChange={handleTabChange} 
@@ -295,7 +292,6 @@ const PokePage: React.FC = () => {
           )}
         </Box>
 
-        {/* Movimentos */}
         {pokemon.moves && pokemon.moves.length > 0 && (
           <Box sx={{ mb: 4 }}>
             <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold" }}>Movimentos</Typography>
@@ -325,7 +321,6 @@ const PokePage: React.FC = () => {
           </Box>
         )}
 
-        {/* Sprites alternativos */}
         {pokemon.sprites && (
           <Box>
             <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold" }}>Sprites</Typography>
