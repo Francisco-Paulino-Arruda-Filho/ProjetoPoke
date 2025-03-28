@@ -4,7 +4,6 @@ import {
   Chip, 
   Paper, 
   Grid, 
-  Divider, 
   Avatar, 
   List, 
   ListItem, 
@@ -124,7 +123,6 @@ const PokePage: React.FC = () => {
           </Box>
         </Box>
 
-        {/* Botão de voltar */}
         <Box sx={{ mb: 2 }}>
           <Button 
             variant="contained" 
@@ -135,8 +133,6 @@ const PokePage: React.FC = () => {
           </Button>
         </Box>
 
-        {/* Restante do código permanece igual... */}
-        {/* Imagem principal */}
         <Box sx={{ 
           display: "flex", 
           justifyContent: "center", 
@@ -241,7 +237,6 @@ const PokePage: React.FC = () => {
             </Grid>
           )}
 
-          {/* Restante do conteúdo das tabs permanece igual... */}
           {tabValue === 1 && (
             <Paper elevation={2} sx={{ p: 3, borderRadius: 3 }}>
               <Typography variant="h6" sx={{ mb: 3, fontWeight: "bold" }}>Estatísticas de Batalha</Typography>
