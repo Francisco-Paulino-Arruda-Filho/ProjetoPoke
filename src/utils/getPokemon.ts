@@ -86,14 +86,14 @@ const fetchPokemonData = async (url: string): Promise<PokeData | null> => {
     }
   };
 
-const fetchAllPokemonUrls = async (): Promise<string[]> => {
+const fetchAllPokemonUrls = async (offset: number, limit: number): Promise<string[]> => {
   try {
-      const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=1040"); 
-      const data = await response.json();
-      return data.results.map((pokemon: any) => pokemon.url);
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`);
+    const data = await response.json();
+    return data.results.map((pokemon: any) => pokemon.url);
   } catch (error) {
-      console.error("Error fetching Pokémon list:", error);
-      return [];
+    console.error("Error fetching Pokémon list:", error);
+    return [];
   }
 };
 

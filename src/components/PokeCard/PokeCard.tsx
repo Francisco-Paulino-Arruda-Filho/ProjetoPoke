@@ -53,6 +53,7 @@ const PokemonCard: React.FC<PokeData> = (pokemon: PokeData) => {
                     transform: "scale(1.05)"
                 }
             }}
+            data-cy="pokemon-card"
         >
             <CardContent sx={{ background: color, textAlign: "center" }}>
                 <Typography variant="h6" component="div" sx={{ fontWeight: "bold", textTransform: "capitalize", color: "white" }}>
@@ -97,6 +98,7 @@ const PokemonCard: React.FC<PokeData> = (pokemon: PokeData) => {
                     <strong>Tipos:</strong>
                     {pokemon.types.map((type, index) => (
                         <Chip
+                            data-cy={`pokemon-type-${type}`}
                             key={index}
                             label={type}
                             sx={{
@@ -110,7 +112,9 @@ const PokemonCard: React.FC<PokeData> = (pokemon: PokeData) => {
                     ))}
                 </Box>
             </Box>
-            <Button variant="contained" color="primary" onClick={() => navigate(`/pokemon/${pokemon.id}`)}>
+            <Button 
+                data-cy="pokemon-details-button"
+                variant="contained" color="primary" onClick={() => navigate(`/pokemon/${pokemon.id}`)}>
               Ver detalhes
             </Button>
         </Card>
