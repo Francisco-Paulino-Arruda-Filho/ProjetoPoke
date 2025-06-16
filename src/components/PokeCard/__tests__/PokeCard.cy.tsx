@@ -52,6 +52,6 @@ describe('PokemonCard', () => {
       </MemoryRouter>
     );
 
-    cy.get("[data-cy='pokemon-details-button']").should('exist');
+    cy.get("[data-cy='pokemon-button-details-1']").should('exist');
   });
 });

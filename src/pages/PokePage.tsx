@@ -81,7 +81,9 @@ const PokePage: React.FC = () => {
   const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Container maxWidth="lg" sx={{ py: 4 }}
+      data-cy="pokemon-container"
+    >
       <Paper elevation={3} sx={{ 
         p: 3, 
         borderRadius: 4,

@@ -113,7 +113,7 @@ const PokemonCard: React.FC<PokeData> = (pokemon: PokeData) => {
                 </Box>
             </Box>
             <Button 
-                data-cy="pokemon-details-button"
+                data-cy={`pokemon-button-details-${pokemon.id}`}
                 variant="contained" color="primary" onClick={() => navigate(`/pokemon/${pokemon.id}`)}>
               Ver detalhes
             </Button>
