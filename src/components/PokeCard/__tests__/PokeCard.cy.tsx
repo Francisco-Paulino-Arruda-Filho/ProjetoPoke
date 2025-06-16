@@ -54,4 +54,21 @@ describe('PokemonCard', () => {
 
     cy.get("[data-cy='pokemon-button-details-1']").should('exist');
   });
+
+  /*it('Checa se a função navigate é executada ao clicar no botão', () => {
+    const navigateStub = cy.stub().as('navigateSpy');
+
+    // Intercepta o hook useNavigate e retorna o stub
+    cy.stub(require('react-router-dom'), 'useNavigate').returns(navigateStub);
+
+    cy.mount(
+      <MemoryRouter>
+        <PokemonCard {...mockPokemon} />
+      </MemoryRouter>
+    );
+
+    cy.get(`[data-cy="pokemon-button-details-${mockPokemon.id}"]`).click();
+
+    cy.get('@navigateSpy').should('have.been.calledWith', `/pokemon/${mockPokemon.id}`);
+  });*/
 });
