@@ -1,74 +1,37 @@
 import { MemoryRouter } from 'react-router-dom';
 import PokemonCard from "../PokeCard";
-import PokeData from "../../../models/PokeData";
+import {
+  getPokemonCard,
+  getPokemonTypeChip,
+  getPokemonDetailsButton,
+} from "../../../../cypress/e2e/elements/PokeCardElements";
+import mockPokemon from "../../../../cypress/e2e/elements/mockPokemon";
 
 describe('PokemonCard', () => {
-  const mockPokemon: PokeData = {
-    id: 1,
-    name: 'bulbasaur',
-    description: 'A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.',
-    height: '0.7 m',
-    weight: '6.9 kg',
-    types: ['grass', 'poison'],
-    image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
-  };
 
-  it('Checa se o componente renderiza com a props', () => {
+  beforeEach(() => {
     cy.mount(
       <MemoryRouter>
         <PokemonCard {...mockPokemon} />
       </MemoryRouter>
     );
+  });
 
-    cy.get("[data-cy='pokemon-card']").should('contain.text', '#1 - bulbasaur');
-    cy.get('p').should('contain.text', 'A strange seed was planted on its back at birth.');
+  it('Checa se o componente renderiza com as props', () => {
+    getPokemonCard().should('contain.text', '#1 - bulbasaur');
+    cy.get('p').should('contain.text', 'A strange seed was planted on its back');
     cy.get('img').should('have.attr', 'src', mockPokemon.image);
   });
 
-  it('Checa se a cor correta é aplicada baseada no tipo', () => {
-    cy.mount(
-      <MemoryRouter>
-        <PokemonCard {...mockPokemon} />
-      </MemoryRouter>
-    );
-
-    cy.get('[data-cy="pokemon-type-grass"]').first() .should('have.css', 'background-color', 'rgb(120, 200, 80)'); // #78c850
+  it('Checa se a cor correta é aplicada baseada no tipo primário', () => {
+    getPokemonTypeChip('grass').should('have.css', 'background-color', 'rgb(120, 200, 80)'); // #78c850
   });
 
-  it('Checa se o tipo a cor do tipo secundário é aplicada corretamente', () => {
-    cy.mount(
-      <MemoryRouter>
-        <PokemonCard {...mockPokemon} />
-      </MemoryRouter>
-    );
-    cy.get('[data-cy="pokemon-type-poison"]').should('have.css', 'background-color', 'rgb(160, 64, 160)'); // ou 'rgb(160, 60, 160)' dependendo da cor real
-
+  it('Checa se a cor correta é aplicada baseada no tipo secundário', () => {
+    getPokemonTypeChip('poison').should('have.css', 'background-color', 'rgb(160, 64, 160)');
   });
 
-  it('Checa se o botão é renderizado', () => {
-    cy.mount(
-      <MemoryRouter>
-        <PokemonCard {...mockPokemon} />
-      </MemoryRouter>
-    );
-
-    cy.get("[data-cy='pokemon-button-details-1']").should('exist');
+  it('Checa se o botão de detalhes é renderizado', () => {
+    getPokemonDetailsButton(mockPokemon.id).should('exist');
   });
-
-  /*it('Checa se a função navigate é executada ao clicar no botão', () => {
-    const navigateStub = cy.stub().as('navigateSpy');
-
-    // Intercepta o hook useNavigate e retorna o stub
-    cy.stub(require('react-router-dom'), 'useNavigate').returns(navigateStub);
-
-    cy.mount(
-      <MemoryRouter>
-        <PokemonCard {...mockPokemon} />
-      </MemoryRouter>
-    );
-
-    cy.get(`[data-cy="pokemon-button-details-${mockPokemon.id}"]`).click();
-
-    cy.get('@navigateSpy').should('have.been.calledWith', `/pokemon/${mockPokemon.id}`);
-  });*/
 });
