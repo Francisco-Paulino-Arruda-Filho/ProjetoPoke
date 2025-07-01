@@ -3,7 +3,7 @@ import { Grid, Button, Card, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useLocation, useNavigate } from "react-router-dom";
 import PokeData from "../models/PokeData";
-import PokemonCard from "../components/PokeCard/PokeCard";
+import PokemonCardEdit from "../components/PokeCardEdit/PokeCardEdit";
 
 const MAX_TEAM_SIZE = 6;
 const STORAGE_KEY = "my-pokemon-team";
@@ -35,13 +35,6 @@ const TeamBuilder = () => {
     loadTeam();
   }, [location]); // Recarrega quando a rota muda
 
-  // Função para atualizar um slot específico (adicione esta função)
-  const updateTeamSlot = (slotIndex: number, pokemon: PokeData | null) => {
-    const newTeam = [...team];
-    newTeam[slotIndex] = pokemon;
-    setTeam(newTeam);
-  };
-
   const handleAddPokemon = (slotIndex: number) => {
     navigate(`/selecionar?slot=${slotIndex}`);
   };
@@ -56,7 +49,7 @@ const TeamBuilder = () => {
         {team.map((pokemon, index) => (
           <Grid item xs={12} sm={6} md={4} key={index}>
             {pokemon ? (
-              <PokemonCard {...pokemon} />
+              <PokemonCardEdit {...pokemon} slotIndex={index} />
             ) : (
               <Card
                 sx={{

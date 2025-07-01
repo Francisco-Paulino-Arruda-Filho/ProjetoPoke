@@ -9,37 +9,36 @@ import {
   Button,
   Stack,
 } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import getTypeColor from "../../utils/getTypeColor";
 import PokeData from "../../models/PokeData";
 
 const MAX_TEAM_SIZE = 6;
 const STORAGE_KEY = "my-pokemon-team";
 
-const PokemonCardAdd: React.FC<PokeData> = (pokemon: PokeData) => {
+interface PokemonCardEditProps extends PokeData {
+  slotIndex: number;
+}
+
+const PokemonCardEdit: React.FC<PokemonCardEditProps> = ({ slotIndex, ...pokemon }) => {
   const navigate = useNavigate();
   const color = getTypeColor(pokemon.types);
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const slotIndex = parseInt(queryParams.get('slot') || '0', 10);
 
-  const handleAdd = () => {
+  const handleRemove = () => {
     const stored = localStorage.getItem(STORAGE_KEY);
-    const team: (PokeData | null)[] = stored ? JSON.parse(stored) : Array(MAX_TEAM_SIZE).fill(null);
+    const team: (PokeData | null)[] = stored
+      ? JSON.parse(stored)
+      : Array(MAX_TEAM_SIZE).fill(null);
 
-    team[slotIndex] = {
-      id: pokemon.id,
-      name: pokemon.name,
-      image: pokemon.image,
-      description: pokemon.description,
-      height: pokemon.height,
-      weight: pokemon.weight,
-      types: pokemon.types
-    };
-
+    team[slotIndex] = null;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(team));
-    navigate("/team-builder");
-    console.log(localStorage.getItem(STORAGE_KEY));
+    console.log("Pokémon removido do slot", slotIndex);
+    window.location.reload(); // Recarrega a página para refletir a remoção
+  };
+
+
+  const handleEdit = () => {
+    navigate(`/selecionar?slot=${slotIndex}`);
   };
 
   return (
@@ -105,31 +104,41 @@ const PokemonCardAdd: React.FC<PokeData> = (pokemon: PokeData) => {
 
         <Box sx={{ marginTop: 1, display: "flex", flexWrap: "wrap" }}>
           <strong>Tipos:</strong>
-          {Array.isArray(pokemon.types) && pokemon.types.map((type, index) => (
-            <Chip
-              data-cy={`pokemon-type-${type}`}
-              key={index}
-              label={type}
-              sx={{
-                margin: "3px",
-                backgroundColor: getTypeColor([type]),
-                color: "white",
-                fontSize: "0.8rem",
-                textTransform: "capitalize",
-              }}
-            />
-          ))}
+          {Array.isArray(pokemon.types) &&
+            pokemon.types.map((type, index) => (
+              <Chip
+                data-cy={`pokemon-type-${type}`}
+                key={index}
+                label={type}
+                sx={{
+                  margin: "3px",
+                  backgroundColor: getTypeColor([type]),
+                  color: "white",
+                  fontSize: "0.8rem",
+                  textTransform: "capitalize",
+                }}
+              />
+            ))}
         </Box>
       </Box>
 
       <Stack direction="row" spacing={1} justifyContent="center" sx={{ p: 1 }}>
         <Button
-          data-cy={`pokemon-button-add-${pokemon.id}`}
+          data-cy={`pokemon-button-edit-${pokemon.id}`}
           variant="contained"
-          color="success"
-          onClick={handleAdd}
+          color="warning"
+          onClick={handleEdit}
         >
-           Adicionar
+          Editar
+        </Button>
+
+        <Button
+          data-cy={`pokemon-button-remove-${pokemon.id}`}
+          variant="contained"
+          color="error"
+          onClick={handleRemove}
+        >
+          Remover
         </Button>
 
         <Button
@@ -145,4 +154,4 @@ const PokemonCardAdd: React.FC<PokeData> = (pokemon: PokeData) => {
   );
 };
 
-export default PokemonCardAdd;
+export default PokemonCardEdit;
