@@ -62,29 +62,40 @@ const fetchPokemonDataByData = async (id: number): Promise<PokeFullData | null> 
 };
 
 const fetchPokemonData = async (url: string): Promise<PokeData | null> => {
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-      console.log(data)
-      
-      const speciesResponse = await fetch(data.species.url);
-      const speciesData = await speciesResponse.json();
-      const description = speciesData.flavor_text_entries.find((entry: any) => entry.language.name === "en")?.flavor_text || "No description available.";
-      
-      return {
-        id: data.id,
-        name: data.name,
-        description: description,
-        height: `${data.height / 10}`,
-        weight: `${data.weight / 10}`,
-        types: data.types.map((t: any) => t.type.name),
-        image: data.sprites.front_default
-      };
-    } catch (error) {
-      console.error("Error fetching Pokémon data:", error);
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    
+    if (!data.types || !Array.isArray(data.types) || data.types.length === 0) {
+      console.warn(`Pokémon com dados inválidos (sem tipos): ${data.name}`);
       return null;
     }
-  };
+
+    const speciesResponse = await fetch(data.species.url);
+    const speciesData = await speciesResponse.json();
+
+    const descriptionEntry = speciesData.flavor_text_entries.find(
+      (entry: any) => entry.language.name === "en"
+    );
+
+    const description = descriptionEntry?.flavor_text
+      ?.replace(/\n|\f/g, " ")
+      || "No description available.";
+
+    return {
+      id: data.id,
+      name: data.name,
+      description,
+      height: `${data.height / 10}`,
+      weight: `${data.weight / 10}`,
+      types: data.types.map((t: any) => t.type.name),
+      image: data.sprites.front_default || data.sprites.other?.["official-artwork"]?.front_default || ""
+    };
+  } catch (error) {
+    console.error("Error fetching Pokémon data:", error);
+    return null;
+  }
+};
 
 const fetchAllPokemonUrls = async (offset: number, limit: number): Promise<string[]> => {
   try {
