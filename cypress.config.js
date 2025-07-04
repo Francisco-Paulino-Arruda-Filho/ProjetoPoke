@@ -14,6 +14,7 @@ export default defineConfig({
       framework: "react",
       bundler: "vite",
     },
+    specPattern: 'src/components/**/__tests__/*.cy.{js,ts,jsx,tsx}',
     indexHtmlFile: "index.html"
   },
 });
