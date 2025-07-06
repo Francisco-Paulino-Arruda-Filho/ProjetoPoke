@@ -66,6 +66,7 @@ const TeamBuilder = () => {
                   Slot {index + 1}
                 </Typography>
                 <Button
+                  data-cy={`add-pokemon-button-${index}`}
                   variant="contained"
                   color="primary"
                   onClick={() => handleAddPokemon(index)}

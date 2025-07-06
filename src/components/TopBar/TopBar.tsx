@@ -80,7 +80,9 @@ const TopBar = (props: Props) => {
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             <Button onClick={() => navigate("/")} sx={{color: '#fff'}}>Home</Button>
-            <Button onClick={() => navigate("/team-builder")} sx={{color: '#fff'}}>Team Buider</Button>
+            <Button 
+              data-cy="team-builder-button"
+              onClick={() => navigate("/team-builder")} sx={{color: '#fff'}}>Team Buider</Button>
           </Box>
         </Toolbar>
       </AppBar>
