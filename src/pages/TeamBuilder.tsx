@@ -49,7 +49,9 @@ const TeamBuilder = () => {
         {team.map((pokemon, index) => (
           <Grid item xs={12} sm={6} md={4} key={index}>
             {pokemon ? (
-              <PokemonCardEdit {...pokemon} slotIndex={index} />
+              <PokemonCardEdit 
+                data-cy={`pokemon-card-${index}`}
+                {...pokemon} slotIndex={index} />
             ) : (
               <Card
                 sx={{
