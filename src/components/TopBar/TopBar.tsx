@@ -82,7 +82,7 @@ const TopBar = (props: Props) => {
             <Button onClick={() => navigate("/")} sx={{color: '#fff'}}>Home</Button>
             <Button 
               data-cy="team-builder-button"
-              onClick={() => navigate("/team-builder")} sx={{color: '#fff'}}>Team Buider</Button>
+              onClick={() => navigate("/add-pokemon-team")} sx={{color: '#fff'}}>Team Buider</Button>
           </Box>
         </Toolbar>
       </AppBar>

@@ -12,34 +12,39 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import getTypeColor from "../../utils/getTypeColor";
 import PokeData from "../../models/PokeData";
-
-const MAX_TEAM_SIZE = 6;
-const STORAGE_KEY = "my-pokemon-team";
+import { useParams } from "react-router-dom";
 
 const PokemonCardAdd: React.FC<PokeData> = (pokemon: PokeData) => {
   const navigate = useNavigate();
   const color = getTypeColor(pokemon.types);
   const location = useLocation();
+  const { id } = useParams();
   const queryParams = new URLSearchParams(location.search);
   const slotIndex = parseInt(queryParams.get('slot') || '0', 10);
 
   const handleAdd = () => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    const team: (PokeData | null)[] = stored ? JSON.parse(stored) : Array(MAX_TEAM_SIZE).fill(null);
-
-    team[slotIndex] = {
-      id: pokemon.id,
-      name: pokemon.name,
-      image: pokemon.image,
-      description: pokemon.description,
-      height: pokemon.height,
-      weight: pokemon.weight,
-      types: pokemon.types
-    };
-
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(team));
-    navigate("/team-builder");
-    console.log(localStorage.getItem(STORAGE_KEY));
+    ///team/{team_id}/slot/{slot_index}
+    fetch(`http://localhost:8000/team/${id}/slot/${slotIndex}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ pokemonId: pokemon.id, ...pokemon }),
+    })
+      .then(res => {
+        console.log("Response status:", res);
+        if (!res.ok) {
+          throw new Error("Erro ao adicionar Pokémon");
+        }
+        return res.json(); 
+      })
+      .then(updatedTeam => {
+        console.log("Time atualizado:", updatedTeam);
+        navigate(`/team-builder/${id}`);
+      })
+      .catch(error => {
+        console.error("Erro:", error);
+      });
   };
 
   return (

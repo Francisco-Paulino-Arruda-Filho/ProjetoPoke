@@ -1,42 +1,44 @@
 import { useEffect, useState } from "react";
 import { Grid, Button, Card, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import PokeData from "../models/PokeData";
 import PokemonCardEdit from "../components/PokeCardEdit/PokeCardEdit";
 
 const MAX_TEAM_SIZE = 6;
-const STORAGE_KEY = "my-pokemon-team";
+//const STORAGE_KEY = "my-pokemon-team";
 
 const TeamBuilder = () => {
   const [team, setTeam] = useState<(PokeData | null)[]>(Array(MAX_TEAM_SIZE).fill(null));
   const navigate = useNavigate();
-  const location = useLocation(); // Adicione este hook
+  const location = useLocation(); 
+  const { id } = useParams<{ id: string }>();
 
-  // Função para carregar o time
-  const loadTeam = () => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      try {
-        const parsed: (PokeData | null)[] = JSON.parse(stored);
-        const normalized = [...parsed];
-        while (normalized.length < MAX_TEAM_SIZE) {
-          normalized.push(null);
-        }
-        setTeam(normalized.slice(0, MAX_TEAM_SIZE));
-      } catch (e) {
-        console.error("Error parsing team data:", e);
+  const loadTeam = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000/team/${id}`);
+      if (!response.ok) {
+        throw new Error("Erro ao carregar time");
       }
+      const data = await response.json();
+      const normalized = [...data.team]; // corrigido de `data.pokemons`
+
+      while (normalized.length < MAX_TEAM_SIZE) {
+        normalized.push(null);
+      }
+
+      setTeam(normalized.slice(0, MAX_TEAM_SIZE));
+    } catch (e) {
+      console.error("Erro ao carregar time:", e);
     }
   };
 
-  // Carrega o time na montagem inicial e sempre que a localização mudar
   useEffect(() => {
     loadTeam();
-  }, [location]); // Recarrega quando a rota muda
-
+  }, [location]); 
+  
   const handleAddPokemon = (slotIndex: number) => {
-    navigate(`/selecionar?slot=${slotIndex}`);
+    navigate(`/${id}/selecionar?slot=${slotIndex}`);
   };
 
   return (
