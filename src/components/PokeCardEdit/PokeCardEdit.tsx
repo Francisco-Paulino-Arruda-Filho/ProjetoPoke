@@ -73,7 +73,7 @@ const PokemonCardEdit: React.FC<PokemonCardEditProps> = ({ slotIndex, ...pokemon
             color: "white",
           }}
         >
-          #{pokemon.id} - {pokemon.name}
+          #{pokemon.number} - {pokemon.name}
         </Typography>
       </CardContent>
 

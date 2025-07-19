@@ -30,6 +30,23 @@ const TeamManager = () => {
     }
   };
 
+  const handledeleteTeam = async (_id: number) => {
+    try {
+      const response = await fetch(`http://localhost:8000/team/${_id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao deletar time");
+      }
+
+      window.location.reload();
+      navigate("/add-pokemon-team");
+    } catch (error) {
+      console.error("Erro ao deletar time:", error);
+    }
+  };
+
   useEffect(() => {
     loadTeams();
   }, []);
@@ -45,14 +62,37 @@ const TeamManager = () => {
       </Button>
 
       <Grid container spacing={2}>
-        {teams.map((team) => (
+        {teams.map((team, index) => (
           console.log("Rendering team:", team._id),
           <Grid item xs={12} sm={6} md={4} key={team._id}>
-            <Card onClick={() => navigate(`/team-builder/${team._id}`)} sx={{ cursor: "pointer" }}>
+            <Card sx={{ cursor: "pointer" }}
+              data-cy={`team-card-${team._id}`}
+            >
               <CardContent>
-                <Typography variant="body2" color="text.secondary">
-                  ID: {team._id}
+                <Typography variant="h5" component="div">
+                  Time {index + 1}
                 </Typography>
+                <Button 
+                  variant="outlined"
+                  color="primary"
+                  data-cy={`edit-team-button-${team._id}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/team-builder/${team._id}`);
+                  }}
+                >
+                  Editar
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handledeleteTeam(team._id);
+                  }}
+                >
+                  Deletar
+                </Button>
               </CardContent>
             </Card>
           </Grid>

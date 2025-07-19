@@ -22,30 +22,38 @@ const PokemonCardAdd: React.FC<PokeData> = (pokemon: PokeData) => {
   const queryParams = new URLSearchParams(location.search);
   const slotIndex = parseInt(queryParams.get('slot') || '0', 10);
 
-  const handleAdd = () => {
-    ///team/{team_id}/slot/{slot_index}
-    fetch(`http://localhost:8000/team/${id}/slot/${slotIndex}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ pokemonId: pokemon.id, ...pokemon }),
-    })
-      .then(res => {
-        console.log("Response status:", res);
-        if (!res.ok) {
-          throw new Error("Erro ao adicionar Pokémon");
-        }
-        return res.json(); 
-      })
-      .then(updatedTeam => {
-        console.log("Time atualizado:", updatedTeam);
-        navigate(`/team-builder/${id}`);
-      })
-      .catch(error => {
-        console.error("Erro:", error);
+  const handleAdd = async () => {
+    const payload = {
+      number: pokemon.id,
+      name: pokemon.name,
+      image: pokemon.image,
+      types: pokemon.types,
+      description: pokemon.description,
+      height: pokemon.height,
+      weight: pokemon.weight,
+    };
+
+    try {
+      const response = await fetch(`http://localhost:8000/team/${id}/slot/${slotIndex}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
       });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error("Erro ao adicionar Pokémon:", data);
+      } else {
+        navigate(`/team-builder/${id}`);
+      }
+    } catch (error) {
+      console.error("Erro na requisição:", error);
+    }
   };
+
 
   return (
     <Card

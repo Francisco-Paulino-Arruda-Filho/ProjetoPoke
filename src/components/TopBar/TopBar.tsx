@@ -14,6 +14,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
+import BackButton from '../backButton';
 
 interface Props {
   /**
@@ -36,9 +37,6 @@ const TopBar = (props: Props) => {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
-        MUI
-      </Typography>
       <Divider />
       <List>
         <ListItem disablePadding>
@@ -76,7 +74,7 @@ const TopBar = (props: Props) => {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            MUI
+            <BackButton />
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             <Button onClick={() => navigate("/")} sx={{color: '#fff'}}>Home</Button>
