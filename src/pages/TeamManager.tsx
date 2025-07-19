@@ -23,8 +23,10 @@ const TeamManager = () => {
       const response = await fetch("http://localhost:8000/team", {
         method: "POST",
       });
+      console.log("Create team response:", response);
       const data = await response.json();
       navigate(`/team-builder/${data._id}`);
+      return;
     } catch (err) {
       console.error("Erro ao criar time:", err);
     }
@@ -40,7 +42,8 @@ const TeamManager = () => {
         throw new Error("Erro ao deletar time");
       }
 
-      window.location.reload();
+      //window.location.reload();
+      setTeams(teams.filter(team => team._id !== _id));
       navigate("/add-pokemon-team");
     } catch (error) {
       console.error("Erro ao deletar time:", error);
@@ -57,7 +60,9 @@ const TeamManager = () => {
         Gerenciar Times Pokémon
       </Typography>
 
-      <Button variant="contained" color="primary" onClick={handleCreateTeam} sx={{ mb: 3 }}>
+      <Button 
+        data-cy="create-team-button"
+        variant="contained" color="primary" onClick={handleCreateTeam} sx={{ mb: 3 }}>
         Criar novo time
       </Button>
 
@@ -75,7 +80,7 @@ const TeamManager = () => {
                 <Button 
                   variant="outlined"
                   color="primary"
-                  data-cy={`edit-team-button-${team._id}`}
+                  data-cy={`edit-team-button-${index}`}
                   onClick={(e) => {
                     e.stopPropagation();
                     navigate(`/team-builder/${team._id}`);

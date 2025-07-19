@@ -13,6 +13,7 @@ const BackButton: React.FC = () => {
   return (
     <Button
       variant="outlined"
+      data-cy="back-button"
       startIcon={<ArrowBackIcon />}
       onClick={handleBack}
       sx={{color: '#fff'}}

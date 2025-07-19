@@ -35,14 +35,14 @@ describe('PokemonCardEdit', () => {
   });
 
   it('Checa se o botão "Editar" é renderizado e clicável', () => {
-    getPokemonEditButton(mockPokemon.id!).should('exist').click();
+    getPokemonEditButton(mockPokemon.number!).should('exist').click();
   });
 
   it('Checa se o botão "Remover" é renderizado', () => {
-    getPokemonRemoveButton(mockPokemon.id!).should('exist');
+    getPokemonRemoveButton(mockPokemon.number!).should('exist');
   });
 
   it('Checa se o botão "Ver detalhes" é renderizado', () => {
-    getPokemonDetailsButton(mockPokemon.id!).should('exist');
+    getPokemonDetailsButton(mockPokemon.number!).should('exist');
   });
 });

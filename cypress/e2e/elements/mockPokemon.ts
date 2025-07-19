@@ -2,6 +2,7 @@ import PokeData from "../../../src/models/PokeData";
 
 const mockPokemon: PokeData = {
     id: 1,
+    number: 1,
     name: 'bulbasaur',
     description: 'A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.',
     height: '0.7 m',

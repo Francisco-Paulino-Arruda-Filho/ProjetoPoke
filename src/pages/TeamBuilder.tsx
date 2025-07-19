@@ -4,6 +4,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import PokeData from "../models/PokeData";
 import PokemonCardEdit from "../components/PokeCardEdit/PokeCardEdit";
+import { useCallback } from "react";
 
 const MAX_TEAM_SIZE = 6;
 //const STORAGE_KEY = "my-pokemon-team";
@@ -14,7 +15,7 @@ const TeamBuilder = () => {
   const location = useLocation(); 
   const { id } = useParams<{ id: string }>();
 
-  const loadTeam = async () => {
+  const loadTeam = useCallback(async () => {
     try {
       const response = await fetch(`http://localhost:8000/team/${id}`);
       if (!response.ok) {
@@ -31,11 +32,11 @@ const TeamBuilder = () => {
     } catch (e) {
       console.error("Erro ao carregar time:", e);
     }
-  };
+  }, [id]);
 
   useEffect(() => {
     loadTeam();
-  }, [location]); 
+  }, [location, loadTeam]);
   
   const handleAddPokemon = (slotIndex: number) => {
     navigate(`/${id}/selecionar?slot=${slotIndex}`);
