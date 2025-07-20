@@ -132,7 +132,7 @@ const PokemonCardEdit: React.FC<PokemonCardEditProps> = ({ slotIndex, ...pokemon
 
       <Stack direction="row" spacing={1} justifyContent="center" sx={{ p: 1 }}>
         <Button
-          data-cy={`pokemon-button-edit-${pokemon.id}`}
+          data-cy={`pokemon-button-edit-${pokemon.number}`}
           variant="contained"
           color="warning"
           onClick={handleEdit}
@@ -141,7 +141,7 @@ const PokemonCardEdit: React.FC<PokemonCardEditProps> = ({ slotIndex, ...pokemon
         </Button>
 
         <Button
-          data-cy={`pokemon-button-remove-${pokemon.id}`}
+          data-cy={`pokemon-button-remove-${pokemon.number}`}
           variant="contained"
           color="error"
           onClick={handleRemove}
