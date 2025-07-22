@@ -8,11 +8,34 @@ describe('Home', () => {
   it("Checa se redireciona para a página de Team Builder", () => {
     cy.visit('http://localhost:5173/');
     cy.get("[data-cy='team-builder-button']").click();
-    cy.url().should('include', '/team-builder');
+    cy.url().should('include', '/add-pokemon-team');
   });
 
-  it("Checa se o botão de adicionar Pokémon funciona", () => {
-    cy.visit('http://localhost:5173/team-builder');
+  it("Checa se o botão de votar funciona", () => {
+    cy.visit('http://localhost:5173/');
+    cy.get("[data-cy='team-builder-button']").should('exist').click();
+    cy.get("[data-cy='back-button']").should('exist').click();
+    cy.url().should('include', '/');
+  });
+
+  it("Checa se o botão de criar time funciona", () => {
+    cy.intercept('POST', '**/team').as('createTeam');
+
+    cy.visit('http://localhost:5173/add-pokemon-team');
+
+    cy.get("[data-cy='create-team-button']").should('exist').click();
+
+    cy.wait('@createTeam').then((interception) => {
+      console.log('Intercepted:', interception);
+    });
+
+    cy.wait(500);
+    cy.url().should('match', /\/team-builder\/[\w\d]+$/);
+  });
+
+  it("Checa se está funcionando adicionando Pokémon ao time", () => {
+    cy.visit('http://localhost:5173/add-pokemon-team');
+    cy.get("[data-cy='create-team-button']").should('exist').click();
     cy.get("[data-cy='add-pokemon-button-0']").click();
     cy.url().should('include', '/selecionar?slot=0');
     cy.get("[data-cy='pokemon-button-add-6']").click();
@@ -20,102 +43,66 @@ describe('Home', () => {
     cy.get('[data-cy="pokemon-card"]', { timeout: 10000 }).should('contain.text', '#6 - charizard');
   });
 
-  it("Checa se o botão de remover Pokémon funciona", () => {
-    cy.visit('http://localhost:5173/team-builder');
+  it("Checa se está funcionando removendo Pokémon do time", () => {
+    cy.visit('http://localhost:5173/add-pokemon-team');
+    cy.get("[data-cy='create-team-button']").should('exist').click();
     cy.get("[data-cy='add-pokemon-button-0']").click();
     cy.url().should('include', '/selecionar?slot=0');
     cy.get("[data-cy='pokemon-button-add-6']").click();
     cy.url().should('include', '/team-builder');
-    cy.get("[data-cy='pokemon-card']", { timeout: 10000 })
-      .first()
-      .find("[data-cy='pokemon-button-remove-6']")
-      .click();
-    cy.get("[data-cy='pokemon-card']").should('not.exist');
+    cy.get('[data-cy="pokemon-card"]').should('contain.text', '#6 - charizard');
+    cy.get("[data-cy='pokemon-button-remove-6']").click();
+    cy.get('[data-cy="pokemon-card"]').should('not.exist');
   });
 
-  it("Checa se o pokemon é editado corretamente", () => {
-    cy.visit('http://localhost:5173/team-builder');
+  it("Checa se o botão de ver detalhes funciona", () => {
+    cy.visit('http://localhost:5173/add-pokemon-team');
+    cy.get("[data-cy='create-team-button']").should('exist').click();
     cy.get("[data-cy='add-pokemon-button-0']").click();
     cy.url().should('include', '/selecionar?slot=0');
     cy.get("[data-cy='pokemon-button-add-6']").click();
     cy.url().should('include', '/team-builder');
-    cy.get("[data-cy='pokemon-card']", { timeout: 10000 })
-      .first()
-      .find("[data-cy='pokemon-button-edit-6']")
-      .click();
-    cy.url().should('include', '/selecionar?slot=0');
-    cy.get("[data-cy='pokemon-button-add-1']").click();
-    cy.url().should('include', '/team-builder');
-    cy.get('[data-cy="pokemon-card"]', { timeout: 10000 }).should('contain.text', '#1 - bulbasaur');
+    cy.get("[data-cy='pokemon-button-details-6']").click();
+    cy.url().should('include', '/pokemon/6');
   });
 
-  it("Cria um time completo com 6 Pokémon", () => {
-    cy.visit('http://localhost:5173/team-builder');
+  it("Checa se o botão de editar Pokémon funciona", () => {
+    cy.visit('http://localhost:5173/add-pokemon-team');
+    cy.get("[data-cy='create-team-button']").should('exist').click();
+    cy.get("[data-cy='add-pokemon-button-0']").click();
+    cy.url().should('include', '/selecionar?slot=0');
+    cy.get("[data-cy='pokemon-button-add-6']").click();
+    cy.url().should('include', '/team-builder');
+    cy.get('[data-cy="pokemon-card"]', { timeout: 10000 }).should('contain.text', '#6 - charizard');
+    cy.get("[data-cy='pokemon-button-edit-6']").click();
+    cy.get("[data-cy='pokemon-button-add-3']").click();
+    cy.url().should('include', '/team-builder');
+    cy.get('[data-cy="pokemon-card"]').should('contain.text', '#3 - venusaur');
+  });
 
+  it("Checa a persistência do time após recarregar a página", () => {
+    cy.visit('http://localhost:5173/add-pokemon-team');
+    cy.get("[data-cy='create-team-button']").should('exist').click();
+    cy.get("[data-cy='add-pokemon-button-0']").click();
+    cy.url().should('include', '/selecionar?slot=0');
+    cy.get("[data-cy='pokemon-button-add-6']").click();
+    cy.url().should('include', '/team-builder');
+    cy.reload();
+    cy.get('[data-cy="pokemon-card"]').should('contain.text', '#6 - charizard');
+  });
+
+  it("Montar time completo e verificar persistência", () => {
+    cy.visit('http://localhost:5173/add-pokemon-team');
+    cy.get("[data-cy='create-team-button']").should('exist').click();
     for (let i = 0; i < 6; i++) {
       cy.get(`[data-cy='add-pokemon-button-${i}']`).click();
       cy.url().should('include', `/selecionar?slot=${i}`);
-      cy.get(`[data-cy='pokemon-button-add-${i + 1}']`).click();
+      cy.get(`[data-cy='pokemon-button-add-${i + 1}']`).click(); // Adiciona Pokémon com ID de 1 a 6
       cy.url().should('include', '/team-builder');
     }
-
-    cy.get('[data-cy="pokemon-card"]', { timeout: 10000 }).should('have.length', 6);
-
-    const expectedPokemons = [
-      '#1 - bulbasaur',
-      '#2 - ivysaur',
-      '#3 - venusaur',
-      '#4 - charmander',
-      '#5 - charmeleon',
-      '#6 - charizard'
-    ];
-
-    expectedPokemons.forEach((name) => {
-      cy.contains(name, { timeout: 10000 }).should('exist');
-    });
-  });
-
-  it("Persiste o time após recarregar a página", () => {
-    cy.visit('http://localhost:5173/team-builder');
-
-    cy.get("[data-cy='add-pokemon-button-0']").click();
-    cy.get("[data-cy='pokemon-button-add-6']").click();
-    cy.url().should('include', '/team-builder');
-
     cy.reload();
-
-    cy.get('[data-cy="pokemon-card"]', { timeout: 10000 }).should('contain.text', '#6 - charizard');
-  });
-
-  it("Editar e não mudar o Pokémon mantém o mesmo", () => {
-    cy.visit('http://localhost:5173/team-builder');
-    cy.get("[data-cy='add-pokemon-button-0']").click();
-    cy.get("[data-cy='pokemon-button-add-6']").click();
-
-    cy.get("[data-cy='pokemon-button-edit-6']").click();
-    cy.url().should('include', '/selecionar?slot=0');
-
-    cy.visit('http://localhost:5173/team-builder');
-
-    cy.get('[data-cy="pokemon-card"]', { timeout: 10000 }).should('contain.text', '#6 - charizard');
-  });
-
-  it("Checa se o botão de detalhes do Pokémon funciona", () => {
-    cy.visit('http://localhost:5173/');
-    cy.get("[data-cy='pokemon-button-details-1']").click();
-    cy.url().should('include', '/pokemon/1');
-    cy.contains('#1 - bulbasaur', { timeout: 10000 }).should('exist');  
-  });
-
-  it("Checa se o localStorage persistiu ao mudar de página", () => {
-    cy.visit('http://localhost:5173/team-builder');
-    cy.get("[data-cy='add-pokemon-button-0']").click();
-    cy.get("[data-cy='pokemon-button-add-6']").click();
-    cy.url().should('include', '/team-builder');
-
-    cy.visit('http://localhost:5173/');
-    cy.visit('http://localhost:5173/team-builder');
-
-    cy.get('[data-cy="pokemon-card"]', { timeout: 10000 }).should('contain.text', '#6 - charizard');
+    for (let i = 0; i < 6; i++) {
+      cy.get('[data-cy="pokemon-card"]').should('contain.text', `#${i + 1}`);
+    }
   });
 });

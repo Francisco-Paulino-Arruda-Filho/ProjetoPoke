@@ -1,0 +1,1 @@
+export const getBackButton = () => cy.get('button').contains('Voltar');
