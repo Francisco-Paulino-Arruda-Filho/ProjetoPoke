@@ -1,14 +1,16 @@
-// src/layouts/Layout.tsx
-import { Outlet } from "react-router-dom";
-import TopBar from "../../components/TopBar/TopBar";
+import React from 'react';
+import TopBar from '../../components/TopBar/TopBar';
+import { Outlet } from 'react-router-dom';
 
-const Layout = () => {
+const MainLayout: React.FC = () => {
   return (
     <>
       <TopBar />
-      <Outlet />
+      <main>
+        <Outlet />
+      </main>
     </>
   );
 };
 
-export default Layout;
+export default MainLayout;

@@ -1,14 +1,28 @@
-// src/App.tsx
-import { Suspense } from "react";
-import { RouterProvider } from "react-router-dom";
-import router from "./router/router";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import MainLayout from './components/Layout/Layout';
+import AuthLayout from './components/AuthLayout/AuthLayout';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 
-const App: React.FC = () => {
+function App() {
   return (
-    <Suspense fallback={<div>Carregando...</div>}>
-      <RouterProvider router={router} />
-    </Suspense>
+    <Router>
+      <Routes>
+        {/* Layout com TopBar */}
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Home />} />
+          {/* outras páginas protegidas */}
+        </Route>
+
+        {/* Layout sem TopBar */}
+        <Route element={<AuthLayout />}>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+        </Route>
+      </Routes>
+    </Router>
   );
-};
+}
 
 export default App;
