@@ -7,7 +7,6 @@ import PokemonCardEdit from "../components/PokeCardEdit/PokeCardEdit";
 import { useCallback } from "react";
 
 const MAX_TEAM_SIZE = 6;
-//const STORAGE_KEY = "my-pokemon-team";
 
 const TeamBuilder = () => {
   const [team, setTeam] = useState<(PokeData | null)[]>(Array(MAX_TEAM_SIZE).fill(null));

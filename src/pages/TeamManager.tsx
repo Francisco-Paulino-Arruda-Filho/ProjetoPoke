@@ -2,16 +2,17 @@ import { useEffect, useState } from "react";
 import { Box, Button, Typography, Card, CardContent, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import TeamPokemon from "../models/TeamPokemon";
+import { useAuth } from "../context/AuthProvider";
 
 const TeamManager = () => {
   const [teams, setTeams] = useState<TeamPokemon[]>([]);
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const loadTeams = async () => {
     try {
-      const response = await fetch("http://localhost:8000/all_teams");
+      const response = await fetch(`http://localhost:8000/team/${user?.id}/user`);
       const data = await response.json();
-      console.log("Teams loaded:", data);
       setTeams(data);
     } catch (err) {
       console.error("Erro ao carregar times:", err);
@@ -19,14 +20,26 @@ const TeamManager = () => {
   };
 
   const handleCreateTeam = async () => {
+    if (!user) {
+      alert("Usuário não autenticado");
+      return;
+    }
+
     try {
       const response = await fetch("http://localhost:8000/team", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ user_id: user.id }), // <-- passa o ID do usuário
       });
-      console.log("Create team response:", response);
+
+      if (!response.ok) {
+        throw new Error("Erro ao criar time");
+      }
+
       const data = await response.json();
       navigate(`/team-builder/${data._id}`);
-      return;
     } catch (err) {
       console.error("Erro ao criar time:", err);
     }
