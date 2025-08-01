@@ -107,11 +107,31 @@ describe('Home', () => {
     for (let i = 0; i < 6; i++) {
       cy.get(`[data-cy='add-pokemon-button-${i}']`).click();
       cy.url().should('include', `/selecionar?slot=${i}`);
-      cy.get(`[data-cy='pokemon-button-add-${i + 1}']`).click(); // Adiciona Pokémon com ID de 1 a 6
+      cy.get(`[data-cy='pokemon-button-add-${i + 1}']`).click(); 
     }
     cy.reload();
     for (let i = 0; i < 6; i++) {
       cy.get('[data-cy="pokemon-card"]').should('contain.text', `#${i + 1}`);
     }
+  });
+});
+
+describe("Login Erros", () => {
+  beforeEach(() => {
+    cy.visit('http://localhost:5173/login');
+  });
+
+  it("Checa se o login falha com email inválido", () => {
+    cy.get('[data-cy="login-email"]').type('email@valido.com');
+    cy.get('[data-cy="login-password"]').type('senha');
+    cy.get('[data-cy="login-button"]').click();
+    cy.contains('Credenciais inválidas.').should('exist');
+  });
+
+  it("Checa se o login falha com senha incorreta", () => {
+    cy.get('[data-cy="login-email"]').type('email@valido.com');
+    cy.get('[data-cy="login-password"]').type('senha-incorreta');
+    cy.get('[data-cy="login-button"]').click();
+    cy.contains('Credenciais inválidas.').should('exist');
   });
 });
