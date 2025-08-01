@@ -92,7 +92,9 @@ const TopBar = (props: Props) => {
             <Button onClick={() => navigate("/home")} sx={{ color: '#fff' }}>Home</Button>
             <Button data-cy="team-builder-button" onClick={() => navigate("/add-pokemon-team")} sx={{ color: '#fff' }}>Team Builder</Button>
             {user && (
-              <Button onClick={handleLogout} sx={{ color: '#fff' }} data-cy="logout-button">Logout</Button>
+              <Button 
+                data-cy="logout-button"
+                onClick={handleLogout} sx={{ color: '#fff' }}>Logout</Button>
             )}
           </Box>
         </Toolbar>

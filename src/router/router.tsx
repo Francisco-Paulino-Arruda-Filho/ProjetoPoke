@@ -10,6 +10,8 @@ import AddPokemonTeam from "../pages/TeamManager";
 import PokePage from "../pages/PokePage";
 import SelecaoPage from "../pages/SelecaoPage";
 import TeamBuilder from "../pages/TeamBuilder";
+import AuthErrorPage from "../pages/AuthErrorPage";
+import AppErrorPage from "../pages/AppErrorPage";
 
 const router = createBrowserRouter([
   {
@@ -20,7 +22,7 @@ const router = createBrowserRouter([
       { path: "login", element: <LoginPage /> },
       { path: "cadastro", element: <RegisterPage /> },
     ],
-    errorElement: <div>Página não encontrada (auth)</div>, // você pode criar componente melhor
+    errorElement: <AuthErrorPage />,
   },
   {
     path: "/",
@@ -34,7 +36,7 @@ const router = createBrowserRouter([
       { path: "add-pokemon-team", element: <AddPokemonTeam /> },
 
     ],
-    errorElement: <div>Página não encontrada (app)</div>,
+    errorElement: <AppErrorPage />,
   },
 ]);
 export default router;
