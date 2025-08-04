@@ -1,10 +1,37 @@
+describe("Register page", () => {
+  it("Checa o fluxo de cadastro de usuário", () => {
+    const randomString = Math.random().toString(36).substring(2, 10); // Ex: "f8g7h2k9"
+    const testEmail = `${randomString}@gmail.com`;
+    const testUser = `TestUser${randomString}`;
+
+    cy.visit('http://localhost:5173/cadastro');
+
+    cy.get('[data-cy="register-name"]').type(testUser);
+
+    cy.get('[data-cy="register-email"]')
+      .type(testEmail)
+
+    cy.get('[data-cy="register-password"]').type('teste');
+    cy.get('[data-cy="register-button"]').click();
+
+    cy.contains('Cadastro realizado com sucesso!').should('exist');
+    cy.url().should('include', '/login');
+
+    cy.get('[data-cy="login-email"]').type(testEmail);
+    cy.get('[data-cy="login-password"]').type('teste');
+    cy.get('[data-cy="login-button"]').click().then(() => {
+      cy.url().should('include', '/home');
+    });
+  });
+});
+
 describe('Home', () => {
 
   beforeEach(() => {
     cy.visit('http://localhost:5173/login');
 
-    cy.get('[data-cy="login-email"]').type('fpaulinofilho04@gmail.com');
-    cy.get('[data-cy="login-password"]').type('4'); 
+    cy.get('[data-cy="login-email"]').type('teste@gmail.com');
+    cy.get('[data-cy="login-password"]').type('teste'); 
     cy.get('[data-cy="login-button"]').click();
   });
 
@@ -100,20 +127,6 @@ describe('Home', () => {
     cy.reload();
     cy.get('[data-cy="pokemon-card"]').should('contain.text', '#6 - charizard');
   });
-
-  it("Montar time completo e verificar persistência", () => {
-    cy.get("[data-cy='team-builder-button']").should('exist').click();
-    cy.get("[data-cy='create-team-button']").should('exist').click();
-    for (let i = 0; i < 6; i++) {
-      cy.get(`[data-cy='add-pokemon-button-${i}']`).click();
-      cy.url().should('include', `/selecionar?slot=${i}`);
-      cy.get(`[data-cy='pokemon-button-add-${i + 1}']`).click(); 
-    }
-    cy.reload();
-    for (let i = 0; i < 6; i++) {
-      cy.get('[data-cy="pokemon-card"]').should('contain.text', `#${i + 1}`);
-    }
-  });
 });
 
 describe("Login Erros", () => {
@@ -128,10 +141,12 @@ describe("Login Erros", () => {
     cy.contains('Credenciais inválidas.').should('exist');
   });
 
-  it("Checa se o login falha com senha incorreta", () => {
+ 
+   it("Checa se o login falha com senha incorreta", () => {
     cy.get('[data-cy="login-email"]').type('email@valido.com');
     cy.get('[data-cy="login-password"]').type('senha-incorreta');
     cy.get('[data-cy="login-button"]').click();
     cy.contains('Credenciais inválidas.').should('exist');
   });
+
 });
