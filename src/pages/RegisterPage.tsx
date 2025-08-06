@@ -7,10 +7,11 @@ import {
   Button,
   Box,
   Stack,
-  Alert,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import PokedexAlert from "../components/PokedexAlert"; 
+
 
 interface RegisterFormInputs {
   nome: string;
@@ -38,7 +39,7 @@ const RegisterPage: React.FC = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          username: data.nome, // compatível com backend
+          username: data.nome,
           email: data.email,
           password: data.senha,
         }),
@@ -68,8 +69,8 @@ const RegisterPage: React.FC = () => {
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={2}>
-              {serverError && <Alert severity="error">{serverError}</Alert>}
-              {serverSuccess && <Alert severity="success">{serverSuccess}</Alert>}
+              {serverError && <PokedexAlert type="error" message={serverError} />}
+              {serverSuccess && <PokedexAlert type="success" message={serverSuccess} />}
 
               <TextField
                 label="Nome"

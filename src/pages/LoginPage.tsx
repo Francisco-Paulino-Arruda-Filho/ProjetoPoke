@@ -12,6 +12,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
 import { useForm } from "react-hook-form";
+import CustomAlert from "../components/CustomAlert";
 
 interface LoginFormInputs {
   email: string;
@@ -22,6 +23,7 @@ const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [serverError, setServerError] = React.useState("");
+  const [successAlert, setSuccessAlert] = React.useState(false); // <-- Estado de sucesso
 
   const {
     register,
@@ -31,6 +33,7 @@ const LoginPage: React.FC = () => {
 
   const onSubmit = async (data: LoginFormInputs) => {
     setServerError("");
+    setSuccessAlert(false);
 
     try {
       const response = await fetch("http://localhost:8000/login", {
@@ -54,7 +57,12 @@ const LoginPage: React.FC = () => {
         email: data.email,
       });
 
-      navigate("/home");
+      // Alerta estilizado da Pokédex
+      setSuccessAlert(true);
+      setTimeout(() => {
+        setSuccessAlert(false);
+        navigate("/home");
+      }, 1500);
     } catch (error) {
       console.error(error);
       setServerError("Erro de rede. Tente novamente mais tarde.");
@@ -62,66 +70,77 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" bgcolor="#f0f0f0">
-      <Card sx={{ width: 400, p: 2, borderRadius: 3, boxShadow: 6 }}>
-        <CardContent>
-          <Typography variant="h5" fontWeight="bold" gutterBottom textAlign="center">
-            Login
-          </Typography>
+    <>
+      {/* Alerta estilizado da Pokédex */}
+      {successAlert && (
+        <CustomAlert
+          type="success"
+          title="Login Efetuado!"
+          message="Bem-vindo(a) à Pokédex."
+        />
+      )}
 
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Stack spacing={2}>
-              {serverError && <Alert severity="error">{serverError}</Alert>}
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" bgcolor="#f0f0f0">
+        <Card sx={{ width: 400, p: 2, borderRadius: 3, boxShadow: 6 }}>
+          <CardContent>
+            <Typography variant="h5" fontWeight="bold" gutterBottom textAlign="center">
+              Login
+            </Typography>
 
-              <TextField
-                label="Email"
-                type="email"
-                fullWidth
-                {...register("email", {
-                  required: "Email é obrigatório.",
-                  pattern: {
-                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    message: "Email inválido.",
-                  },
-                })}
-                error={!!errors.email}
-                helperText={errors.email?.message}
-                data-cy="login-email"
-              />
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Stack spacing={2}>
+                {serverError && <Alert severity="error">{serverError}</Alert>}
 
-              <TextField
-                label="Senha"
-                type="password"
-                fullWidth
-                {...register("senha", {
-                  required: "Senha é obrigatória.",
-                })}
-                error={!!errors.senha}
-                helperText={errors.senha?.message}
-                data-cy="login-password"
-              />
+                <TextField
+                  label="Email"
+                  type="email"
+                  fullWidth
+                  {...register("email", {
+                    required: "Email é obrigatório.",
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: "Email inválido.",
+                    },
+                  })}
+                  error={!!errors.email}
+                  helperText={errors.email?.message}
+                  data-cy="login-email"
+                />
 
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                disabled={isSubmitting}
-                data-cy="login-button"
-              >
-                {isSubmitting ? "Entrando..." : "Entrar"}
-              </Button>
+                <TextField
+                  label="Senha"
+                  type="password"
+                  fullWidth
+                  {...register("senha", {
+                    required: "Senha é obrigatória.",
+                  })}
+                  error={!!errors.senha}
+                  helperText={errors.senha?.message}
+                  data-cy="login-password"
+                />
 
-              <Typography variant="body2" textAlign="center">
-                Não tem uma conta?{" "}
-                <Button variant="text" onClick={() => navigate("/cadastro")}>
-                  Cadastre-se
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  disabled={isSubmitting}
+                  data-cy="login-button"
+                >
+                  {isSubmitting ? "Entrando..." : "Entrar"}
                 </Button>
-              </Typography>
-            </Stack>
-          </form>
-        </CardContent>
-      </Card>
-    </Box>
+
+                <Typography variant="body2" textAlign="center">
+                  Não tem uma conta?{" "}
+                  <Button variant="text" onClick={() => navigate("/cadastro")}>
+                    Cadastre-se
+                  </Button>
+                </Typography>
+              </Stack>
+            </form>
+          </CardContent>
+        </Card>
+      </Box>
+    </>
   );
 };
 

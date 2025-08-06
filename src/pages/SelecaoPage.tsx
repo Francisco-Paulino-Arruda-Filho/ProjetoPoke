@@ -4,21 +4,23 @@ import { Box, CircularProgress } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import PokeData from "../models/PokeData";
 import PokemonCardAdd from "../components/PokeCardAdd/PokeCardAdd";
+import CustomAlert from "../components/CustomAlert";
 
 const SeletionPage = () => {
+  const [pokemons, setPokemons] = useState<PokeData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [offset, setOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const limit = 20;
+  const isLoadingRef = useRef(false);
 
-    const [pokemons, setPokemons] = useState<PokeData[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [offset, setOffset] = useState(0);
-    const [hasMore, setHasMore] = useState(true);
-    const limit = 20;
-    const isLoadingRef = useRef(false);
-
-    const loadPokemons = useCallback(async () => {
+  const loadPokemons = useCallback(async () => {
     if (!hasMore || isLoadingRef.current) return;
 
     isLoadingRef.current = true;
     setLoading(true);
+    setError(null); // limpa erro anterior
 
     try {
       const urls = await fetchAllPokemonUrls(offset, limit);
@@ -36,12 +38,12 @@ const SeletionPage = () => {
       setOffset(prev => prev + limit);
     } catch (error) {
       console.error("Failed to load Pokémon:", error);
+      setError("Erro ao carregar os Pokémon. Verifique sua conexão ou tente novamente.");
     } finally {
       isLoadingRef.current = false;
       setLoading(false);
     }
   }, [offset, hasMore]);
-
 
   useEffect(() => {
     loadPokemons();
@@ -73,6 +75,10 @@ const SeletionPage = () => {
         padding: 2,
       }}
     >
+      {error && (
+        <CustomAlert type="error" title="Erro de carregamento" message={error} />
+      )}
+
       <Grid container spacing={3} justifyContent="center">
         {pokemons.map((pokemon) => (
           <Grid item key={pokemon.id} xs={12} sm={6} md={4} lg={3}>

@@ -5,6 +5,7 @@ import Grid from "@mui/material/Grid";
 import PokeData from "../models/PokeData";
 import PokemonCard from "../components/PokeCard/PokeCard";
 
+
 const PokemonList: React.FC = () => {
   const [pokemons, setPokemons] = useState<PokeData[]>([]);
   const [loading, setLoading] = useState(true);
