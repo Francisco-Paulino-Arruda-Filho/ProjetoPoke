@@ -42,6 +42,10 @@ const TopBar = (props: Props) => {
     navigate("/login"); // Redireciona para a tela de login
   };
 
+  const handleProfile = () => {
+    navigate("/perfil");
+  };
+
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Divider />
@@ -59,6 +63,11 @@ const TopBar = (props: Props) => {
         <ListItem disablePadding>
           <ListItemButton sx={{ textAlign: 'center' }} onClick={handleLogout}>
             <ListItemText primary={"Logout"} />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton sx={{ textAlign: 'center' }} onClick={handleProfile}>
+            <ListItemText primary={"Perfil"} />
           </ListItemButton>
         </ListItem>
       </List>
@@ -97,6 +106,11 @@ const TopBar = (props: Props) => {
                 onClick={handleLogout} sx={{ color: '#fff' }}>Logout</Button>
             )}
           </Box>
+          <Button 
+            data-cy="profile-button"
+            onClick={handleProfile} sx={{ color: '#fff' }}>
+            Perfil
+          </Button>
         </Toolbar>
       </AppBar>
       <nav>

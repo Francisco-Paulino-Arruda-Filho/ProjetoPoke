@@ -12,6 +12,7 @@ import SelecaoPage from "../pages/SelecaoPage";
 import TeamBuilder from "../pages/TeamBuilder";
 import AuthErrorPage from "../pages/AuthErrorPage";
 import AppErrorPage from "../pages/AppErrorPage";
+import ProfilePage from "../pages/ProfilePage";
 
 const router = createBrowserRouter([
   {
@@ -34,7 +35,7 @@ const router = createBrowserRouter([
       { path: ":id/selecionar", element: <SelecaoPage /> },
       { path: "team-builder/:id", element: <TeamBuilder /> },
       { path: "add-pokemon-team", element: <AddPokemonTeam /> },
-
+      { path: "perfil", element: <ProfilePage /> },
     ],
     errorElement: <AppErrorPage />,
   },
