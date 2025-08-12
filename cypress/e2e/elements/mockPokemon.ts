@@ -5,8 +5,8 @@ const mockPokemon: PokeData = {
     number: 1,
     name: 'bulbasaur',
     description: 'A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.',
-    height: '0.7 m',
-    weight: '6.9 kg',
+    height: '0.7',
+    weight: '6.9',
     types: ['grass', 'poison'],
     image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
   };
