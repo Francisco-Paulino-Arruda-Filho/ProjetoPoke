@@ -2,11 +2,11 @@ import { MemoryRouter } from 'react-router-dom';
 import PokemonCardEdit from '../PokeCardEdit';
 import mockPokemon from "../../../../cypress/e2e/elements/mockPokemon";
 import {
-  getPokemonCard,
   getPokemonTypeChip,
   getPokemonEditButton,
   getPokemonRemoveButton,
   getPokemonDetailsButton,
+  checkPokemonCardContent,
 } from '../../../../cypress/e2e/utilCards';
 
 describe('PokemonCardEdit', () => {
@@ -21,9 +21,7 @@ describe('PokemonCardEdit', () => {
   });
 
   it('Checa se o componente renderiza com as props', () => {
-    getPokemonCard().should('contain.text', `#${mockPokemon.id} - ${mockPokemon.name}`);
-    cy.get('p').should('contain.text', mockPokemon.description);
-    cy.get('img').should('have.attr', 'src', mockPokemon.image);
+    checkPokemonCardContent(mockPokemon);
   });
 
   it('Checa se os chips de tipo renderizam com a cor correta (primário)', () => {
