@@ -77,4 +77,13 @@ describe('Home', () => {
     editPokemon(6, 3);
     cy.get('[data-cy="pokemon-card"]').should('contain.text', '#3 - venusaur');
   });
+
+  it("Monta um time completo", () => {
+    goToTeamBuilder();
+    createTeam();
+    for (let i = 1; i <= 6; i++) {
+      addPokemonToSlot(i - 1, i);
+    }
+    cy.get('[data-cy="pokemon-card"]').should('have.length', 6);
+  });
 });
