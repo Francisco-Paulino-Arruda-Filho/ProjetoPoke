@@ -131,6 +131,14 @@ describe('Fluxo completo: cadastro -> login -> criar time -> adicionar -> editar
         headers: authHeaders(),
         failOnStatusCode: false,
       });
+    }).then(() => {
+      cy.request({
+        method: 'DELETE',
+        url: `${apiUrl}/user/${userId}`,
+        headers: authHeaders(),
+      }).then((res) => {
+        expect(res.status).to.eq(200);
+      });
     });
   })
 });
