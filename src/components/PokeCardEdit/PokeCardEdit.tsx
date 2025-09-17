@@ -12,9 +12,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import getTypeColor from "../../utils/getTypeColor";
 import PokeData from "../../models/PokeData";
-
-const MAX_TEAM_SIZE = 6;
-const STORAGE_KEY = "my-pokemon-team";
+import { useParams } from "react-router-dom";
 
 interface PokemonCardEditProps extends PokeData {
   slotIndex: number;
@@ -23,22 +21,32 @@ interface PokemonCardEditProps extends PokeData {
 const PokemonCardEdit: React.FC<PokemonCardEditProps> = ({ slotIndex, ...pokemon }) => {
   const navigate = useNavigate();
   const color = getTypeColor(pokemon.types);
+  const { id } = useParams();
 
-  const handleRemove = () => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    const team: (PokeData | null)[] = stored
-      ? JSON.parse(stored)
-      : Array(MAX_TEAM_SIZE).fill(null);
+  const handleRemove = async () => {
+    try {
+      ///team/{team_id}/slot/{slot_index}
+      const response = await fetch(
+        `http://localhost:8000/team/${id}/slot/${slotIndex}`,
+        {
+          method: "DELETE",
+        }
+      );
 
-    team[slotIndex] = null;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(team));
-    console.log("Pokémon removido do slot", slotIndex);
-    window.location.reload(); // Recarrega a página para refletir a remoção
+      if (!response.ok) {
+        throw new Error("Erro ao remover Pokémon");
+      }
+
+      console.log("Pokémon removido do slot", slotIndex);
+      window.location.reload();
+    } catch (error) {
+      console.error("Erro:", error);
+    }
   };
 
 
   const handleEdit = () => {
-    navigate(`/selecionar?slot=${slotIndex}`);
+    navigate(`/${id}/selecionar?slot=${slotIndex}`);
   };
 
   return (
@@ -65,7 +73,7 @@ const PokemonCardEdit: React.FC<PokemonCardEditProps> = ({ slotIndex, ...pokemon
             color: "white",
           }}
         >
-          #{pokemon.id} - {pokemon.name}
+          #{pokemon.number} - {pokemon.name}
         </Typography>
       </CardContent>
 
@@ -124,7 +132,7 @@ const PokemonCardEdit: React.FC<PokemonCardEditProps> = ({ slotIndex, ...pokemon
 
       <Stack direction="row" spacing={1} justifyContent="center" sx={{ p: 1 }}>
         <Button
-          data-cy={`pokemon-button-edit-${pokemon.id}`}
+          data-cy={`pokemon-button-edit-${pokemon.number}`}
           variant="contained"
           color="warning"
           onClick={handleEdit}
@@ -133,7 +141,7 @@ const PokemonCardEdit: React.FC<PokemonCardEditProps> = ({ slotIndex, ...pokemon
         </Button>
 
         <Button
-          data-cy={`pokemon-button-remove-${pokemon.id}`}
+          data-cy={`pokemon-button-remove-${pokemon.number}`}
           variant="contained"
           color="error"
           onClick={handleRemove}

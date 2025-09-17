@@ -1,13 +1,13 @@
 import { MemoryRouter } from 'react-router-dom';
 import PokemonCardAdd from '../PokeCardAdd';
+import mockPokemon from "../../../../cypress/e2e/elements/mockPokemon";
 import {
-  getPokemonCard,
   getPokemonTypeChip,
   getPokemonDetailsButton,
-} from "../../../../cypress/e2e/elements/PokeAddCardElements";
-import mockPokemon from "../../../../cypress/e2e/elements/mockPokemon";
+  checkPokemonCardContent,
+} from "../../../../cypress/e2e/utilCards";
 
-describe('PokemonCardEdit', () => {
+describe('PokemonCardAdd', () => {
   const props = { ...mockPokemon, slotIndex: 0 };
 
   beforeEach(() => {
@@ -19,13 +19,11 @@ describe('PokemonCardEdit', () => {
   });
 
   it('Checa se o componente renderiza com as props', () => {
-    getPokemonCard().should('contain.text', `#${mockPokemon.id} - ${mockPokemon.name}`);
-    cy.get('p').should('contain.text', mockPokemon.description);
-    cy.get('img').should('have.attr', 'src', mockPokemon.image);
+    checkPokemonCardContent(mockPokemon);
   });
 
   it('Checa se os chips de tipo renderizam com a cor correta (primário)', () => {
-    getPokemonTypeChip('grass').should('have.css', 'background-color', 'rgb(120, 200, 80)'); // #78c850
+    getPokemonTypeChip('grass').should('have.css', 'background-color', 'rgb(120, 200, 80)');
   });
 
   it('Checa se os chips de tipo renderizam com a cor correta (secundário)', () => {
@@ -33,6 +31,6 @@ describe('PokemonCardEdit', () => {
   });
 
   it('Checa se o botão "Ver detalhes" é renderizado', () => {
-    getPokemonDetailsButton(mockPokemon.id!).should('exist');
+    getPokemonDetailsButton(mockPokemon.id as number).should('exist');
   });
 });

@@ -1,40 +1,43 @@
-// src/router/router.tsx
-import React from "react";
 import { createBrowserRouter } from "react-router-dom";
-import Layout from "../components/Layout/Layout";
 
-const Home = React.lazy(() => import("../pages/Home"));
-const PokePage = React.lazy(() => import("../pages/PokePage"));
-const SelecaoPage = React.lazy(() => import("../pages/SelecaoPage"));
-const TeamBuilder = React.lazy(() => import("../pages/TeamBuilder"));
+import MainLayout from "../components/Layout/Layout";    // com TopBar
+import AuthLayout from "../components/AuthLayout/AuthLayout";  // sem TopBar
+
+import Home from "../pages/Home";
+import LoginPage from "../pages/LoginPage";
+import RegisterPage from "../pages/RegisterPage";
+import AddPokemonTeam from "../pages/TeamManager";
+import PokePage from "../pages/PokePage";
+import SelecaoPage from "../pages/SelecaoPage";
+import TeamBuilder from "../pages/TeamBuilder";
+import AuthErrorPage from "../pages/AuthErrorPage";
+import AppErrorPage from "../pages/AppErrorPage";
+import ProfilePage from "../pages/ProfilePage";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />, // TopBar está aqui
+    element: <AuthLayout />,  // layout sem topbar (login, cadastro)
     children: [
-      {
-        index: true, // equivale a path: ""
-        element: <Home />,
-      },
-      {
-        path: "pokemon/:id",
-        element: <PokePage />,
-      },
-      {
-        path: "pagina-de-navegacao",
-        element: <SelecaoPage />,
-      },
-      {
-        path: "team-builder",
-        element: <TeamBuilder />,
-      },
-      {
-        path: "selecionar",
-        element: <SelecaoPage />,
-      },
+      { index: true, element: <LoginPage /> },
+      { path: "login", element: <LoginPage /> },
+      { path: "cadastro", element: <RegisterPage /> },
     ],
+    errorElement: <AuthErrorPage />,
+  },
+  {
+    path: "/",
+    element: <MainLayout />,  // layout com topbar (app principal)
+    children: [
+      { index: true, element: <Home /> },
+      { path: "home", element: <Home /> },
+      { path: "pokemon/:id", element: <PokePage /> },
+      { path: ":id/selecionar", element: <SelecaoPage /> },
+      { path: "team-builder/:id", element: <TeamBuilder /> },
+      { path: "add-pokemon-team", element: <AddPokemonTeam /> },
+      { path: "perfil", element: <ProfilePage /> },
+    ],
+    errorElement: <AppErrorPage />,
   },
 ]);
-
 export default router;

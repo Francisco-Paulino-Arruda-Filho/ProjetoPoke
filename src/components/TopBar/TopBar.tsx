@@ -14,6 +14,8 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
+import BackButton from '../backButton';
+import { useAuth } from '../../context/AuthProvider';
 
 interface Props {
   /**
@@ -28,29 +30,46 @@ const drawerWidth = 240;
 const TopBar = (props: Props) => {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const { logout, user } = useAuth(); // <- acessa o logout
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate("/login"); // Redireciona para a tela de login
+  };
+
+  const handleProfile = () => {
+    navigate("/perfil");
+  };
+
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
-        MUI
-      </Typography>
       <Divider />
       <List>
         <ListItem disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
-              <ListItemText primary={"Home"} />
-            </ListItemButton>
-            <ListItem disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
-              <ListItemText primary={"Team Builder"} />
-            </ListItemButton>
-          </ListItem>
-          </ListItem>
+          <ListItemButton sx={{ textAlign: 'center' }} onClick={() => navigate("/home")}>
+            <ListItemText primary={"Home"} />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton sx={{ textAlign: 'center' }} onClick={() => navigate("/add-pokemon-team")}>
+            <ListItemText primary={"Team Builder"} />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton sx={{ textAlign: 'center' }} onClick={handleLogout}>
+            <ListItemText primary={"Logout"} />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton sx={{ textAlign: 'center' }} onClick={handleProfile}>
+            <ListItemText primary={"Perfil"} />
+          </ListItemButton>
+        </ListItem>
       </List>
     </Box>
   );
@@ -76,14 +95,22 @@ const TopBar = (props: Props) => {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            MUI
+            <BackButton />
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-            <Button onClick={() => navigate("/")} sx={{color: '#fff'}}>Home</Button>
-            <Button 
-              data-cy="team-builder-button"
-              onClick={() => navigate("/team-builder")} sx={{color: '#fff'}}>Team Buider</Button>
+            <Button onClick={() => navigate("/home")} sx={{ color: '#fff' }}>Home</Button>
+            <Button data-cy="team-builder-button" onClick={() => navigate("/add-pokemon-team")} sx={{ color: '#fff' }}>Team Builder</Button>
+            {user && (
+              <Button 
+                data-cy="logout-button"
+                onClick={handleLogout} sx={{ color: '#fff' }}>Logout</Button>
+            )}
           </Box>
+          <Button 
+            data-cy="profile-button"
+            onClick={handleProfile} sx={{ color: '#fff' }}>
+            Perfil
+          </Button>
         </Toolbar>
       </AppBar>
       <nav>
@@ -92,9 +119,7 @@ const TopBar = (props: Props) => {
           variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
+          ModalProps={{ keepMounted: true }}
           sx={{
             display: { xs: 'block', sm: 'none' },
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
@@ -108,6 +133,7 @@ const TopBar = (props: Props) => {
       </Box>
     </Box>
   );
-}
+};
 
-export default TopBar
+export default TopBar;
+

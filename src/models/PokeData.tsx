@@ -1,5 +1,6 @@
 interface PokeData {
-    id?: number;  
+    id?: string | number;
+    number?: number;
     name: string;
     description: string;
     height: string;

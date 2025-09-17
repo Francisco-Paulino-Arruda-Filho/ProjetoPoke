@@ -1,13 +1,13 @@
 import { MemoryRouter } from 'react-router-dom';
 import PokemonCardEdit from '../PokeCardEdit';
+import mockPokemon from "../../../../cypress/e2e/elements/mockPokemon";
 import {
-  getPokemonCard,
   getPokemonTypeChip,
   getPokemonEditButton,
   getPokemonRemoveButton,
   getPokemonDetailsButton,
-} from "../../../../cypress/e2e/elements/PokeEditCardElement";
-import mockPokemon from "../../../../cypress/e2e/elements/mockPokemon";
+  checkPokemonCardContent,
+} from '../../../../cypress/e2e/utilCards';
 
 describe('PokemonCardEdit', () => {
   const props = { ...mockPokemon, slotIndex: 0 };
@@ -21,28 +21,26 @@ describe('PokemonCardEdit', () => {
   });
 
   it('Checa se o componente renderiza com as props', () => {
-    getPokemonCard().should('contain.text', `#${mockPokemon.id} - ${mockPokemon.name}`);
-    cy.get('p').should('contain.text', mockPokemon.description);
-    cy.get('img').should('have.attr', 'src', mockPokemon.image);
+    checkPokemonCardContent(mockPokemon);
   });
 
   it('Checa se os chips de tipo renderizam com a cor correta (primário)', () => {
-    getPokemonTypeChip('grass').should('have.css', 'background-color', 'rgb(120, 200, 80)'); // #78c850
+    getPokemonTypeChip(mockPokemon.types[0]).should('have.css', 'background-color', 'rgb(120, 200, 80)');
   });
 
   it('Checa se os chips de tipo renderizam com a cor correta (secundário)', () => {
-    getPokemonTypeChip('poison').should('have.css', 'background-color', 'rgb(160, 64, 160)');
+    getPokemonTypeChip(mockPokemon.types[1]).should('have.css', 'background-color', 'rgb(160, 64, 160)');
   });
 
   it('Checa se o botão "Editar" é renderizado e clicável', () => {
-    getPokemonEditButton(mockPokemon.id!).should('exist').click();
+    getPokemonEditButton(mockPokemon.id as number).should('exist').click();
   });
 
   it('Checa se o botão "Remover" é renderizado', () => {
-    getPokemonRemoveButton(mockPokemon.id!).should('exist');
+    getPokemonRemoveButton(mockPokemon.id as number).should('exist');
   });
 
   it('Checa se o botão "Ver detalhes" é renderizado', () => {
-    getPokemonDetailsButton(mockPokemon.id!).should('exist');
+    getPokemonDetailsButton(mockPokemon.id as number).should('exist');
   });
 });
