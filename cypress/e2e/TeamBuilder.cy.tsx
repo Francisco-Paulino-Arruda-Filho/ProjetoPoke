@@ -29,4 +29,14 @@ describe("Fluxo do Team Builder", () => {
     teamBuilder.clickAddPokemonButton(3);
     teamBuilder.pageHavePokemonText();
   });
+
+  it("Monta um time completo", () => {
+    teamBuilder.addPokemon(0, 1); 
+    teamBuilder.addPokemon(1, 2); 
+    teamBuilder.addPokemon(2, 3); 
+    teamBuilder.addPokemon(3, 4); 
+    teamBuilder.addPokemon(4, 5); 
+    teamBuilder.addPokemon(5, 6); 
+    teamBuilder.pageHavePokemonText();
+  });
 });
