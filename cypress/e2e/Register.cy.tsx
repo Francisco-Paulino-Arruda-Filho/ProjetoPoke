@@ -34,12 +34,14 @@ describe("Fluxo de cadastro e login", () => {
   });
 
   it("Tenta cadastrar com email já existente", () => {
+    const testUser = "ExistingUser";
+    const testEmail = "test@email.com";
+    const password = "1234";
     registerPage.doRegisterFail(testUser, testEmail, password);
     registerPage.visit();
     registerPage.fillForm(testUser, testEmail, password);
     registerPage.submit();
     cy.contains("Usuário já existe.").should("exist");
     cy.url().should("include", "/cadastro");
-    registerPage.removeAccount();
   });
 });

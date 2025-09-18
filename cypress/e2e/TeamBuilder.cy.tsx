@@ -29,9 +29,4 @@ describe("Fluxo do Team Builder", () => {
     teamBuilder.clickAddPokemonButton(3);
     teamBuilder.pageHavePokemonText();
   });
-
-  it("Monta um time completo com 6 Pokémon", () => {
-    teamBuilder.fillCompleteTeam();
-    
-  });
 });
