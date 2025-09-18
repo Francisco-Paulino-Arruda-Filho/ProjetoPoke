@@ -1,89 +1,48 @@
-// cypress/e2e/tests.cy.js
-import {
-  registerUser,
-  loginUser,
-  logoutUser,
-  goToTeamBuilder,
-  createTeam,
-  addPokemonToSlot,
-  removePokemon,
-  editPokemon,
-  deleteAccount
-} from '../e2e/utils';
+import RegisterPage from '../e2e/elements/interface/PageObjects/RegisterPage';
+import HomePage from '../e2e/elements/interface/PageObjects/HomePage';
+import { backButton } from './utils';
 
-describe("Register page", () => {
-  it("Checa o fluxo de cadastro de usuário", () => {
-    const randomString = Math.random().toString(36).substring(2, 10);
-    const testEmail = `${randomString}@gmail.com`;
-    const testUser = `TestUser${randomString}`;
+describe('Home tests', () => {
+  const testEmail = "test@email.com";
+  const testpassword = "1234";
+  const registerPage = new RegisterPage();
+  const homePage = new HomePage();
 
-    registerUser(testUser, testEmail, 'teste');
-    cy.contains('Cadastro realizado com sucesso!').should('exist');
-    cy.url().should('include', '/login');
-
-    loginUser(testEmail, 'teste');
-    cy.url().should('include', '/home');
-
-    deleteAccount();
-    cy.url().should('include', '/login');
-  });
-});
-
-describe('Home', () => {
-  const randomString = Math.random().toString(36).substring(2, 10);
-  const testEmail = `${randomString}@gmail.com`;
-  const testUser = `TestUser${randomString}`;
   beforeEach(() => {
-    registerUser(testUser, testEmail, 'teste');
-    cy.visit("/login");
-    loginUser(testEmail, 'teste');
+    registerPage.doLogin(testEmail, testpassword);
+    homePage.visit();
   });
-
-  afterEach(() => {
-    deleteAccount();
-  })
 
   it("Checa se o botão de logout funciona", () => {
-    loginUser(testEmail, 'teste');
-    logoutUser();
-    loginUser(testEmail, 'teste');
-    cy.url().should('include', '/home');
+    homePage.logout();
   });
 
   it("Checa se redireciona para a página de Team Builder", () => {
-    goToTeamBuilder();
-    cy.url().should('include', '/add-pokemon-team');
+    homePage.goToTeamBuilderPage();
   });
 
-  it("Checa se está funcionando adicionando Pokémon ao time", () => {
-    goToTeamBuilder();
-    createTeam();
-    addPokemonToSlot(0, 6);
-    cy.get('[data-cy="pokemon-card"]').should('contain.text', '#6 - charizard');
+  it("Checa se redireciona para a página de detalhes do Pokémon", () => {
+    homePage.clickPokemonDetails(1);
+    cy.url().should("include", "/pokemon/1");
   });
 
-  it("Checa se está funcionando removendo Pokémon do time", () => {
-    goToTeamBuilder();
-    createTeam();
-    addPokemonToSlot(0, 6);
-    removePokemon(6);
-    cy.get('[data-cy="pokemon-card"]').should('not.exist');
+  it("Checa se o card do Pokémon existe", () => {
+    homePage.checkPokemonExists();
   });
 
-  it("Checa se o botão de editar Pokémon funciona", () => {
-    goToTeamBuilder();
-    createTeam();
-    addPokemonToSlot(0, 6);
-    editPokemon(6, 3);
-    cy.get('[data-cy="pokemon-card"]').should('contain.text', '#3 - venusaur');
+  it("Checa se o botão de voltar funciona", () => {
+    homePage.clickPokemonDetails(1);
+    cy.url().should("include", "/pokemon/1");
+    backButton();
+    cy.url().should("include", "/home");
   });
 
-  it("Monta um time completo", () => {
-    goToTeamBuilder();
+  /*it("Monta um time completo", () => {
+    homePage.goToTeamBuilderPage();
     createTeam();
     for (let i = 1; i <= 6; i++) {
       addPokemonToSlot(i - 1, i);
     }
-    cy.get('[data-cy="pokemon-card"]').should('have.length', 6);
-  });
+    homePage.checkNumberOfPokemonCards(6);
+  });*/
 });

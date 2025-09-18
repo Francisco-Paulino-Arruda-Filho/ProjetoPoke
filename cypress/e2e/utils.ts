@@ -1,5 +1,4 @@
-// cypress/support/testActions.js
-export const registerUser = (name, email, password) => {
+export const registerUser = (name: string, email: string, password: string) => {
   cy.visit('http://localhost:5173/cadastro');
 
   cy.get('[data-cy="register-name"]').type(name);
@@ -8,7 +7,11 @@ export const registerUser = (name, email, password) => {
   cy.get('[data-cy="register-button"]').click();
 };
 
-export const loginUser = (email, password) => {
+export const backButton = () => {
+  cy.get('[data-cy="back-button"]').click();
+};
+
+export const loginUser = (email: string, password: string) => {
   cy.visit('http://localhost:5173/login');
   cy.get('[data-cy="login-email"]').type(email);
   cy.get('[data-cy="login-password"]').type(password);
@@ -27,17 +30,17 @@ export const createTeam = () => {
   cy.get("[data-cy='create-team-button']").click();
 };
 
-export const addPokemonToSlot = (slotIndex, pokemonId) => {
+export const addPokemonToSlot = (slotIndex: number, pokemonId: number) => {
   cy.get(`[data-cy='add-pokemon-button-${slotIndex}']`).click();
   cy.url().should('include', `/selecionar?slot=${slotIndex}`);
   cy.get(`[data-cy='pokemon-button-add-${pokemonId}']`).click();
 };
 
-export const removePokemon = (pokemonId) => {
+export const removePokemon = (pokemonId: number) => {
   cy.get(`[data-cy='pokemon-button-remove-${pokemonId}']`).click();
 };
 
-export const editPokemon = (currentId, newId) => {
+export const editPokemon = (currentId: number, newId: number) => {
   cy.get(`[data-cy='pokemon-button-edit-${currentId}']`).click();
   cy.get(`[data-cy='pokemon-button-add-${newId}']`).click();
 };
@@ -51,3 +54,7 @@ export const deleteAccount = () => {
   // Confirma que voltou para o login
   cy.url().should('include', '/login');
 };
+
+export const goToTeamManager = () => {
+  cy.get("[data-cy='team-builder-button']").click();
+}

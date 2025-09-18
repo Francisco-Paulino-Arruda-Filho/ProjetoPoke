@@ -21,7 +21,7 @@ const TeamBuilder = () => {
         throw new Error("Erro ao carregar time");
       }
       const data = await response.json();
-      const normalized = [...data.team]; // corrigido de `data.pokemons`
+      const normalized = [...data.team]; 
 
       while (normalized.length < MAX_TEAM_SIZE) {
         normalized.push(null);

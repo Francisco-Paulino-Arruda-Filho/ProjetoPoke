@@ -10,7 +10,7 @@ const PokemonList: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [offset, setOffset] = useState(0);
   const [hasMore, setHasMore] = useState(true);
-  const limit = 20; // Número de Pokémon a carregar por vez
+  const limit = 20; 
   const isLoadingRef = useRef(false);
 
   const loadPokemons = useCallback(async () => {
@@ -46,7 +46,6 @@ const PokemonList: React.FC = () => {
     loadPokemons();
   }, []);
 
-  // Configura o scroll infinito
   useEffect(() => {
     const handleScroll = () => {
       if (
@@ -76,7 +75,9 @@ const PokemonList: React.FC = () => {
       <Grid container spacing={3} justifyContent="center">
         {pokemons.map((pokemon) => (
           <Grid item key={pokemon.id} xs={12} sm={6} md={4} lg={3}>
-            <PokemonCard {...pokemon} />
+            <PokemonCard 
+              data-cy={`pokemon-card-${pokemon.id}`}
+              {...pokemon} />
           </Grid>
         ))}
       </Grid>

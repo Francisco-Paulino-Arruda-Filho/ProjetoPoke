@@ -31,7 +31,7 @@ const TeamManager = () => {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ user_id: user.id }), // <-- passa o ID do usuário
+        body: JSON.stringify({ user_id: user.id }), 
       });
 
       if (!response.ok) {
@@ -104,6 +104,7 @@ const TeamManager = () => {
                 <Button
                   variant="outlined"
                   color="secondary"
+                  data-cy={`delete-team-button-${index}`}
                   onClick={(e) => {
                     e.stopPropagation();
                     handledeleteTeam(team._id);

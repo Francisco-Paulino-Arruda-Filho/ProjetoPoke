@@ -25,7 +25,6 @@ const PokemonCardEdit: React.FC<PokemonCardEditProps> = ({ slotIndex, ...pokemon
 
   const handleRemove = async () => {
     try {
-      ///team/{team_id}/slot/{slot_index}
       const response = await fetch(
         `http://localhost:8000/team/${id}/slot/${slotIndex}`,
         {
@@ -61,7 +60,7 @@ const PokemonCardEdit: React.FC<PokemonCardEditProps> = ({ slotIndex, ...pokemon
           transform: "scale(1.05)",
         },
       }}
-      data-cy="pokemon-card"
+      data-cy={`pokemon-card-${slotIndex}`}
     >
       <CardContent sx={{ background: color, textAlign: "center" }}>
         <Typography
@@ -72,6 +71,7 @@ const PokemonCardEdit: React.FC<PokemonCardEditProps> = ({ slotIndex, ...pokemon
             textTransform: "capitalize",
             color: "white",
           }}
+          data-cy="pokemon-name"
         >
           #{pokemon.number} - {pokemon.name}
         </Typography>
