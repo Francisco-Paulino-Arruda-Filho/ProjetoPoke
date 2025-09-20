@@ -18,6 +18,14 @@ class HomeElements {
   pokemonTitle = (id: number, name: string) => {
     return cy.contains('[data-cy="pokemon-card"] h6', `#${id} - ${name}`);
   }
+
+  profileButton = () => {
+    return '[data-cy="profile-button"]';
+  }
+
+  logoutButton = () => {
+    return '[data-cy="logout-button"]';
+  }
 }
 
 export default HomeElements;

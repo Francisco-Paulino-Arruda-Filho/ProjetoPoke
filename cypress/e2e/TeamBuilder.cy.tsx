@@ -1,16 +1,24 @@
 import TeamBuilderPage from "./elements/interface/PageObjects/TeamBuilderPage";
 import RegisterPage from "./elements/interface/PageObjects/RegisterPage";
+import { goToTeamManager } from "./utils";
+import TeamManagerPage from "./elements/interface/PageObjects/TeamManagerPage";
 
 describe("Fluxo do Team Builder", () => {
   const teamBuilder = new TeamBuilderPage();
   const testEmail = "test@email.com";
   const testpassword = "1234";
   const registerPage = new RegisterPage();
+  const teamManager = new TeamManagerPage();
 
   beforeEach(() => {
     registerPage.doLogin(testEmail, testpassword);
     teamBuilder.visit();
     teamBuilder.startTeam();
+  });
+
+  afterEach(() => {
+    goToTeamManager();
+    teamManager.deleteTeamAndConfirm(0);
   });
 
   it("Checa se está funcionando adicionando Pokémon ao time", () => {

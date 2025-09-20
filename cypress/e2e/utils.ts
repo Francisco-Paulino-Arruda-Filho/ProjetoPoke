@@ -58,3 +58,15 @@ export const deleteAccount = () => {
 export const goToTeamManager = () => {
   cy.get("[data-cy='team-builder-button']").click();
 }
+
+export const goToProfile = () => {
+  cy.get("[data-cy='profile-button']").click();
+}
+
+export const goToHome = () => {
+  cy.get("[data-cy='home-button']").click();
+}
+
+export const logout = () => {
+  cy.get("[data-cy='logout-button']").click();
+}

@@ -45,4 +45,14 @@ describe('Home tests', () => {
     }
     homePage.checkNumberOfPokemonCards(6);
   });*/
+
+  it("Checa se o botão de perfil funciona", () => {
+    homePage.goToProfilePage();
+    cy.url().should("include", "/perfil");
+  });
+
+  it("Checa se o botão de logout funciona", () => {
+    homePage.clickLogoutButton();
+    cy.url().should("include", "/login");
+  });
 });

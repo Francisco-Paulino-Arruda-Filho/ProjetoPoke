@@ -50,6 +50,14 @@ class HomePage {
   checkNumberOfPokemonCards(count: number) {
     this.getAllPokemonCards().should("have.length", count);
   }
+
+  goToProfilePage() {
+    cy.get(this.elements.profileButton()).click();
+  }
+
+  clickLogoutButton() {
+    cy.get(this.elements.logoutButton()).click();
+  }
 }
 
 export default HomePage;
