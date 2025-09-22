@@ -76,7 +76,9 @@ const ProfilePage: React.FC = () => {
 
           {user ? (
             <Stack spacing={2}>
-              <Typography><strong>Email:</strong> {user.email}</Typography>
+              <Typography
+                data-cy="email"
+              ><strong>Email:</strong> {user.email}</Typography>
               
               <Button
                 variant="contained"
