@@ -66,7 +66,7 @@ const RegisterPage: React.FC = () => {
             Cadastro
           </Typography>
 
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <Stack spacing={2}>
               {serverError && <Alert severity="error">{serverError}</Alert>}
               {serverSuccess && <Alert severity="success">{serverSuccess}</Alert>}
@@ -82,6 +82,15 @@ const RegisterPage: React.FC = () => {
                 helperText={errors.nome?.message}
                 data-cy="register-name"
               />
+              {errors.nome && (
+                <Typography
+                  variant="caption"
+                  color="error"
+                  data-cy="register-name-error"
+                >
+                  {errors.nome.message}
+                </Typography>
+              )}
 
               <TextField
                 label="Email"
@@ -98,6 +107,15 @@ const RegisterPage: React.FC = () => {
                 helperText={errors.email?.message}
                 data-cy="register-email"
               />
+              {errors.email && (
+                <Typography
+                  variant="caption"
+                  color="error"
+                  data-cy="register-email-error"
+                >
+                  {errors.email.message}
+                </Typography>
+              )}
 
               <TextField
                 label="Senha"
@@ -110,6 +128,15 @@ const RegisterPage: React.FC = () => {
                 helperText={errors.senha?.message}
                 data-cy="register-password"
               />
+              {errors.senha && (
+                <Typography
+                  variant="caption"
+                  color="error"
+                  data-cy="register-password-error"
+                >
+                  {errors.senha.message}
+                </Typography>
+              )}
 
               <Button
                 type="submit"

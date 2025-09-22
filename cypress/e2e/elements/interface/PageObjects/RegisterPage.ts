@@ -57,6 +57,42 @@ class RegisterPage {
     deleteAccount();
     cy.url().should("include", "/login");
   }
+
+  checkRequiredMessages() {
+    this.visit();
+    this.submit();
+
+    cy.get(this.elements.nameError())
+      .should("exist")
+      .and("contain.text", "Nome é obrigatório.");
+    cy.get(this.elements.emailError())
+      .should("exist")
+      .and("contain.text", "Email é obrigatório.");
+    cy.get(this.elements.passwordError())
+      .should("exist")
+      .and("contain.text", "Senha é obrigatória.");
+  }
+
+  checkInvalidEmailMessage(name: string, invalidEmail: string, password = "teste") {
+    this.visit();
+    this.fillForm(name, invalidEmail, password);
+    this.submit();
+
+    cy.get(this.elements.emailError())
+      .should("exist")
+      .and("contain.text", "Email inválido.");
+  }
+
+  checkShortNameMessage(shortName: string, email: string, password = "teste") {
+    this.visit();
+    this.fillForm(shortName, email, password);
+    this.submit();
+
+    cy.get(this.elements.nameError())
+      .should("exist")
+      .and("contain.text", "Nome muito curto.");
+  }
+
 }
 
 export default RegisterPage;

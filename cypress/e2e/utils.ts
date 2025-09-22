@@ -46,12 +46,11 @@ export const editPokemon = (currentId: number, newId: number) => {
 };
 
 export const deleteAccount = () => {
-  cy.get('[data-cy="profile-button"]').click(); // vai para página de perfil
+  cy.get('[data-cy="profile-button"]').click(); 
   cy.url().should('include', '/perfil');
-  cy.get('[data-cy="delete-account-button"]').click(); // clica no botão excluir conta
+  cy.get('[data-cy="delete-account-button"]').click(); 
 
   cy.wait(1500);
-  // Confirma que voltou para o login
   cy.url().should('include', '/login');
 };
 

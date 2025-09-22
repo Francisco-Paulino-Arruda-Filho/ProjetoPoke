@@ -44,4 +44,26 @@ describe("Fluxo de cadastro e login", () => {
     cy.contains("Usuário já existe.").should("exist");
     cy.url().should("include", "/cadastro");
   });
+
+  it("Exibe mensagens obrigatórias quando o formulário está vazio", () => {
+    registerPage.checkRequiredMessages();
+  });
+
+  it("Exibe mensagem de email inválido", () => {
+    registerPage.checkInvalidEmailMessage("Nome Teste", "email_invalido", "123456");
+  });
+
+  it("Exibe mensagem de nome muito curto", () => {
+    registerPage.checkShortNameMessage("A", "teste@email.com", "123456");
+  });
+
+  it("Checa se todas as mensagens de erro aparecem corretamente", () => {
+    registerPage.visit();
+    registerPage.submit();
+    registerPage.fillForm("A", "email_invalido", "123456");
+    registerPage.submit();
+    registerPage.checkInvalidEmailMessage("A", "email_invalido", "123456");
+    registerPage.checkShortNameMessage("A", "email_invalido", "123456");
+    registerPage.checkRequiredMessages();
+  });
 });
