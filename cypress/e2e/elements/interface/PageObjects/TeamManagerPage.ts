@@ -34,6 +34,10 @@ class TeamManagerPage {
   deleteTeamAndConfirm(index: number) {
     this.clickDeleteTeam(index);
   }
+
+  editTeam(index: number) {
+    this.clickEditTeam(index);
+  }
 }
 
 export default TeamManagerPage;

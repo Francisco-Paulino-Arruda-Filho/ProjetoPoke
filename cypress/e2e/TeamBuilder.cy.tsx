@@ -47,4 +47,16 @@ describe("Fluxo do Team Builder", () => {
     teamBuilder.addPokemon(5, 6); 
     teamBuilder.pageHavePokemonText();
   });
+
+  it("Cria o time volta para o Team Manager e checa se o time está lá além de completar o time", () => {
+    teamBuilder.addPokemon(0, 1);
+    teamBuilder.addPokemon(1, 2);
+    goToTeamManager();
+    teamManager.editTeam(0);
+    teamBuilder.addPokemon(2, 3);
+    teamBuilder.addPokemon(3, 4);
+    teamBuilder.addPokemon(4, 5);
+    teamBuilder.addPokemon(5, 6);
+    teamBuilder.pageHavePokemonText();
+  });
 });
