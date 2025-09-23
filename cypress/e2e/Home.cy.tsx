@@ -55,4 +55,9 @@ describe('Home tests', () => {
     homePage.clickLogoutButton();
     cy.url().should("include", "/login");
   });
+
+  it("Tenta acessar rota inexistente", () => {
+    cy.visit("/rota-inexistente");
+    cy.contains("Página não encontrada");
+  });
 });
