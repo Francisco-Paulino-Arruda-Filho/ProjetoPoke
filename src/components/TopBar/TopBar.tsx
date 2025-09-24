@@ -49,28 +49,29 @@ const TopBar = (props: Props) => {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Divider />
-      <List>
-        <ListItem disablePadding>
-          <ListItemButton sx={{ textAlign: 'center' }} onClick={() => navigate("/home")}>
-            <ListItemText primary={"Home"} />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton sx={{ textAlign: 'center' }} onClick={() => navigate("/add-pokemon-team")}>
-            <ListItemText primary={"Team Builder"} />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton sx={{ textAlign: 'center' }} onClick={handleLogout}>
-            <ListItemText primary={"Logout"} />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton sx={{ textAlign: 'center' }} onClick={handleProfile}>
-            <ListItemText primary={"Perfil"} />
-          </ListItemButton>
-        </ListItem>
-      </List>
+        <List>
+          <ListItem disablePadding>
+            <ListItemButton 
+              sx={{ textAlign: 'center' }} onClick={() => navigate("/home")}>
+              <ListItemText primary={"Home"} />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton sx={{ textAlign: 'center' }} onClick={() => navigate("/add-pokemon-team")}>
+              <ListItemText primary={"Team Builder"} />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton sx={{ textAlign: 'center' }} onClick={handleLogout}>
+              <ListItemText primary={"Logout"} />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton sx={{ textAlign: 'center' }} onClick={handleProfile}>
+              <ListItemText primary={"Perfil"} />
+            </ListItemButton>
+          </ListItem>
+        </List>
     </Box>
   );
 
@@ -118,6 +119,7 @@ const TopBar = (props: Props) => {
           container={container}
           variant="temporary"
           open={mobileOpen}
+          data-cy="mobile-drawer"
           onClose={handleDrawerToggle}
           ModalProps={{ keepMounted: true }}
           sx={{
