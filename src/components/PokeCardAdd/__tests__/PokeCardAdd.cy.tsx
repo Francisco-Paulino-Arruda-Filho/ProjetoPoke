@@ -1,36 +1,44 @@
-import { MemoryRouter } from 'react-router-dom';
-import PokemonCardAdd from '../PokeCardAdd';
-import mockPokemon from "../../../../cypress/e2e/elements/mockPokemon";
+import { MemoryRouter } from "react-router-dom";
+import PokemonCardAdd from "../PokeCardAdd";
+import mocksPokemon from "../../../../cypress/e2e/elements/mockPokemon"; // agora importamos todos os tipos
 import {
   getPokemonTypeChip,
   getPokemonDetailsButton,
   checkPokemonCardContent,
 } from "../../../../cypress/e2e/utilCards";
+import typeColors from "../../../utils/typeColors";
+import hexToRgb from '../../../utils/hexToRgb';
 
-describe('PokemonCardAdd', () => {
-  const props = { ...mockPokemon, slotIndex: 0 };
+describe("PokemonCardAdd - todos os tipos", () => {
+  mocksPokemon.forEach((pokemon) => {
+    const props = { ...pokemon, slotIndex: 0 };
 
-  beforeEach(() => {
-    cy.mount(
-      <MemoryRouter>
-        <PokemonCardAdd {...props} />
-      </MemoryRouter>
-    );
-  });
+    describe(`Renderização do tipo(s): ${pokemon.types.join(", ")}`, () => {
+      beforeEach(() => {
+        cy.mount(
+          <MemoryRouter>
+            <PokemonCardAdd {...props} />
+          </MemoryRouter>
+        );
+      });
 
-  it('Checa se o componente renderiza com as props', () => {
-    checkPokemonCardContent(mockPokemon);
-  });
+      it("Checa se o componente renderiza com as props", () => {
+        checkPokemonCardContent(pokemon);
+      });
 
-  it('Checa se os chips de tipo renderizam com a cor correta (primário)', () => {
-    getPokemonTypeChip('grass').should('have.css', 'background-color', 'rgb(120, 200, 80)');
-  });
+      pokemon.types.forEach((type) => {
+        it(`Checa se o chip do tipo ${type} renderiza com a cor correta`, () => {
+          getPokemonTypeChip(type).should(
+            "have.css",
+            "background-color",
+            hexToRgb(typeColors[type])
+          );
+        });
+      });
 
-  it('Checa se os chips de tipo renderizam com a cor correta (secundário)', () => {
-    getPokemonTypeChip('poison').should('have.css', 'background-color', 'rgb(160, 64, 160)');
-  });
-
-  it('Checa se o botão "Ver detalhes" é renderizado', () => {
-    getPokemonDetailsButton(mockPokemon.id as number).should('exist');
+      it('Checa se o botão "Ver detalhes" é renderizado', () => {
+        getPokemonDetailsButton(pokemon.id as number).should("exist");
+      });
+    });
   });
 });
